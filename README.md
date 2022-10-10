@@ -1,15 +1,15 @@
 
 # Web Project S5
-L3 Informatique (2022-2023)
+L3 Informatique (2022-2023
 
 
 
 ## Authors
 
 - [Lucas Mailly](https://www.github.com/LucasMailly)
-- [Mathis Gaborieau](https://www.github.com/)
+- [Mathis Gaborieau](https://github.com/MathisGV)
 - [Fanny Bezançon](https://www.github.com/)
-- [Manon Lacombe](https://www.github.com/)
+- [Manon Lacombe](https://www.github.com/ManonLacombe)
 
 
 ## Run Locally
