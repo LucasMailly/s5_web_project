@@ -39,6 +39,9 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            //If everything is ok, add role and persist
+            $user->addRole('ROLE_PRO');
+
             $entityManager->persist($user);
             $entityManager->flush();
             // do anything else you need here, like send an email
@@ -77,6 +80,9 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            //If everything is ok, add role and persist
+            $user->addRole('ROLE_INDIVIDUAL');
 
             $entityManager->persist($user);
             $entityManager->flush();
