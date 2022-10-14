@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $pseudo;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
-    private $avatar;
+    private ?int $imageSize = null;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private $phone;
@@ -44,20 +44,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"integer", nullable:true)]
     private $noSIRET;
 
-
-    #[ORM\Column(type:"string", length:255)]
-
-    private $image;
-
-    /**
-     * @Vich\UploadableField(mapping="product_images", fileNameProperty="image")
-     * @var File
-     */
-    private $imageFile;
+    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'avatar')]
+    private ?File $imageFile = null;
 
     #[ORM\Column(type:"datetime")]
-    private $updatedAt;
-
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class, orphanRemoval: true)]
     private $articles;
@@ -311,16 +302,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function setImageFile(File $image = null)
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
     {
-        $this->imageFile = $image;
+        $this->imageFile = $imageFile;
 
-        // VERY IMPORTANT:
-        // It is required that at least one field changes if you are using Doctrine,
-        // otherwise the event listeners won't be called and the file is lost
-        if ($image) {
-            // if 'updatedAt' is not defined in your entity, use another property
-            $this->updatedAt = new \DateTime('now');
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
         }
     }
 
@@ -328,14 +320,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->imageFile;
     }
-
-    public function setImage($image)
-    {
-        $this->image = $image;
-    }
-
-    public function getImage()
-    {
-        return $this->image;
-    }
+    
 }
