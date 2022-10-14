@@ -15,6 +15,9 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[Vich\Uploadable]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['name'], message: 'There is already an account with this name')]
+#[UniqueEntity(fields: ['noSIRET'], message: 'There is already an account with this noSIRET')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -33,8 +36,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
 
-    #[ORM\Column(type:"string", length:50, nullable:true)]
-    private $pseudo;
+    #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
+    private $username;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private ?string $avatar = null;
@@ -42,10 +45,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private $phone;
 
-    #[ORM\Column(type:"string", length:255, nullable:true)]
+    #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]
     private $name;
 
-    #[ORM\Column(type:"integer", nullable:true)]
+    #[ORM\Column(type:"integer", nullable:true, unique: true)]
     private $noSIRET;
 
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'avatar')]
@@ -93,14 +96,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @see UserInterface
      */
     public function getUserIdentifier(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
     {
         return (string) $this->email;
     }
@@ -159,14 +154,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getPseudo(): ?string
+    public function getUsername(): ?string
     {
-        return $this->pseudo;
+        return $this->username;
     }
 
-    public function setPseudo(?string $pseudo): self
+    public function setUsername(?string $username): self
     {
-        $this->pseudo = $pseudo;
+        $this->username = $username;
 
         return $this;
     }
