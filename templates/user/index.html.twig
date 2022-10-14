@@ -13,7 +13,6 @@
                 <th>Roles</th>
                 <th>Password</th>
                 <th>Pseudo</th>
-                <th>ImageSize</th>
                 <th>Phone</th>
                 <th>Name</th>
                 <th>NoSIRET</th>
@@ -29,14 +28,12 @@
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.password }}</td>
                 <td>{{ user.pseudo }}</td>
-                <td>{{ user.imageSize }}</td>
                 <td>{{ user.phone }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.noSIRET }}</td>
                 <td>{{ user.updatedAt ? user.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
                     <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -46,6 +43,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_user_new') }}">Create new</a>
 {% endblock %}

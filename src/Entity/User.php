@@ -2,15 +2,19 @@
 
 namespace App\Entity;
 
-use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[Vich\Uploadable]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -33,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $pseudo;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
-    private ?int $imageSize = null;
+    private ?string $avatar = null;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private $phone;
@@ -47,7 +51,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'avatar')]
     private ?File $imageFile = null;
 
-    #[ORM\Column(type:"datetime")]
+    #[ORM\Column(type:"datetime", nullable:true)]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class, orphanRemoval: true)]
@@ -319,6 +323,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getImageFile()
     {
         return $this->imageFile;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
     }
     
 }
