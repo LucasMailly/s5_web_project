@@ -9,7 +9,7 @@ L3 Informatique (2022-2023)
 
 - [Lucas Mailly](https://www.github.com/LucasMailly)
 - [Mathis Gaborieau](https://github.com/MathisGV)
-- [Fanny Bezançon](https://www.github.com/)
+- [Fanny Bezançon](https://github.com/fannybezancon)
 - [Manon Lacombe](https://www.github.com/ManonLacombe)
 
 
