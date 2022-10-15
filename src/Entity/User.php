@@ -13,11 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[Vich\Uploadable]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 #[UniqueEntity(fields: ['name'], message: 'There is already an account with this name')]
 #[UniqueEntity(fields: ['noSIRET'], message: 'There is already an account with this noSIRET')]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -35,7 +35,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
-
     #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
     private $username;
 
@@ -51,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"integer", nullable:true, unique: true)]
     private $noSIRET;
 
-    #[Vich\UploadableField(mapping: 'products', fileNameProperty: 'avatar')]
+    #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatar')]
     private ?File $imageFile = null;
 
     #[ORM\Column(type:"datetime", nullable:true)]
@@ -71,6 +70,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->articles = new ArrayCollection();
         $this->favoriteArticles = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        if ($this->name) {
+            return '[PRO] '.$this->name;
+        } elseif ($this->username) {
+            return '[INDIV] '.$this->username;
+        } else {
+            return $this->id.' - '.$this->email;
+        }
     }
 
     public function getId(): ?int
