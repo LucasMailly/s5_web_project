@@ -65,6 +65,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contact::class)]
     private $contacts;
 
+    #[ORM\Column(type:"boolean")]
+    private $isBlocked = false;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -118,6 +121,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+        // add ROLE_BLOCKED if user is blocked
+        if ($this->isBlocked) {
+            $roles[] = 'ROLE_BLOCKED';
+        }
 
         return array_unique($roles);
     }
@@ -340,6 +347,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function getIsBlocked(): ?bool
+    {
+        return $this->isBlocked;
+    }
+
+    public function setIsBlocked(bool $isBlocked): self
+    {
+        $this->isBlocked = $isBlocked;
+
+        return $this;
     }
     
 }

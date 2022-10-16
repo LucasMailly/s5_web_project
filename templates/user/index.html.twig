@@ -12,7 +12,8 @@
                 <th>Email</th>
                 <th>Roles</th>
                 <th>Password</th>
-                <th>Pseudo</th>
+                <th>Username</th>
+                <th>Avatar</th>
                 <th>Phone</th>
                 <th>Name</th>
                 <th>NoSIRET</th>
@@ -28,6 +29,13 @@
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>{{ user.password }}</td>
                 <td>{{ user.username }}</td>
+                <td>
+                    {% if user.avatar %}
+                        <img src="{{ avatars_path ~ '/' ~ user.avatar }}" alt="avatar" width="40px" height="40px">
+                    {% else %}
+                        <img src="{{ avatars_path ~ '/' ~ 'default.png' }}" alt="avatar" width="40px" height="40px">
+                    {% endif %}
+                </td>
                 <td>{{ user.phone }}</td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.noSIRET }}</td>

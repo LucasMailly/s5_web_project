@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -22,6 +23,7 @@ class UserCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
+            BooleanField::new('isBlocked'),
             ChoiceField::new('roles')->allowMultipleChoices()->setChoices([
                 'Admin' => 'ROLE_ADMIN',
                 'Individual' => 'ROLE_INDIVIDUAL',
