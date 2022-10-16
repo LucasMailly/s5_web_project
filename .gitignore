@@ -22,3 +22,14 @@
 .idea/*
 
 /migrations/
+/public/uploads/*
+!/public/uploads/images
+/public/uploads/images/*
+!/public/uploads/images/avatars
+!/public/uploads/images/articles
+/public/uploads/images/avatars/*
+/public/uploads/images/articles/*
+!/public/uploads/images/avatars/default.png
+!/public/uploads/images/articles/default.png
+!/public/uploads/images/avatars/default.jpg
+!/public/uploads/images/articles/default.jpg
