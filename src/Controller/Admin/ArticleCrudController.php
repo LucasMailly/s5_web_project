@@ -26,11 +26,8 @@ class ArticleCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             TextField::new('libelle'),
-            ImageField::new('imgArticle')
-                ->setBasePath('/uploads/images/articles/')
-                ->setUploadDir('public/uploads/images/articles/')
-                ->setUploadedFileNamePattern('[randomhash].[extension]')
-                ->setRequired(false),
+            TextField::new('imageFile', 'Image')->setFormType(VichImageType::class)->onlyOnForms(),
+            ImageField::new('imgArticle', 'Image')->setBasePath('/uploads/images/articles')->onlyOnIndex(),
             AssociationField::new('author'),
             MoneyField::new('price')->setCurrency('EUR'),
             DateField::new('dateParution'),

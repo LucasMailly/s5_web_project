@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserCrudController extends AbstractCrudController
@@ -31,11 +32,8 @@ class UserCrudController extends AbstractCrudController
             ]),
             TextField::new('email'),
             TextField::new('username'),
-            ImageField::new('avatar')
-                ->setBasePath('/uploads/images/avatars/')
-                ->setUploadDir('public/uploads/images/avatars/')
-                ->setUploadedFileNamePattern('[randomhash].[extension]')
-                ->setRequired(false),
+            TextField::new('imageFile', 'Image')->setFormType(VichImageType::class)->onlyOnForms(),
+            ImageField::new('avatar', 'Image')->setBasePath('/uploads/images/avatars')->onlyOnIndex(),
             TextField::new('phone'),
             TextField::new('name'),
             IntegerField::new('noSIRET'),
