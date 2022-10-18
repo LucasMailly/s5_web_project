@@ -54,12 +54,13 @@ class UserController extends AbstractController
 
     public function edit(Request $request, User $user, UserRepository $userRepository): Response
     {
-        $form = $this->createForm(IndividualUserFormType::class, $user);
-        $form->handleRequest($request);
-         /*   if ($user->getRoles() == 'ROLE_INDIVIDUAL') {
-                $form = $this->createForm(IndividualUserFormType::class, $user);
-                $form->handleRequest($request);}*/
-         if ($user->getRoles() == 'ROLE_PRO') {
+
+
+        $form = null;
+        if (in_array('ROLE_INDIVIDUAL', $user->getRoles(), true)) {
+            $form = $this->createForm(IndividualUserFormType::class, $user);
+            $form->handleRequest($request);}
+         if ( in_array('ROLE_PRO', $user->getRoles(), true)) {
             $form = $this->createForm(ProUserFormType::class, $user);
             $form->handleRequest($request);
         }
@@ -69,6 +70,7 @@ class UserController extends AbstractController
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
+
 
         return $this->renderForm('user/edit.html.twig', [
             'user' => $user,

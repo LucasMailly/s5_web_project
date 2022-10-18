@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class IndividualUserFormType extends AbstractType
 {
@@ -15,11 +16,9 @@ class IndividualUserFormType extends AbstractType
             ->add('email')
             ->add('password')
             ->add('username')
-            ->add('avatar')
             ->add('phone')
             ->add('name')
-            ->add('noSIRET')
-
+            ->add('imageFile',VichImageType::class,['label' => 'photo de profil'])
 
         ;
     }

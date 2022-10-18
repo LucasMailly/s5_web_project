@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-
+use Serializable;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
 #[UniqueEntity(fields: ['name'], message: 'There is already an account with this name')]
 #[UniqueEntity(fields: ['noSIRET'], message: 'There is already an account with this noSIRET')]
 #[Vich\Uploadable]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
 {
 
     #[ORM\Id]
@@ -39,9 +39,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $username;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
-    private ?string $avatar = null;
-
-    #[ORM\Column(type:"string", length:255, nullable:true)]
     private $phone;
 
     #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]
@@ -52,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatar')]
     private ?File $imageFile = null;
+
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+    private ?string $avatar = null;
 
     #[ORM\Column(type:"datetime", nullable:true)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -360,5 +360,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
+    public function serialize()
+    {
+        return serialize($this->getId());
+    }
+
+    public function unserialize($serialized)
+    {
+        $this->id = unserialize($serialized);
+    }
 }
