@@ -19,7 +19,7 @@ class Contact
     #[ORM\Column(type: 'string', length: 255)]
     private $email;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private $message;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'contacts')]

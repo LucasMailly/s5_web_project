@@ -2,15 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\ContactRepository;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-#[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+#[UniqueEntity(fields: ['name'], message: 'There is already an account with this name')]
+#[UniqueEntity(fields: ['noSIRET'], message: 'There is already an account with this noSIRET')]
+#[Vich\Uploadable]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
@@ -28,21 +35,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string')]
     private $password;
 
-
-    #[ORM\Column(type:"string", length:50, nullable:true)]
-    private $pseudo;
+    #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
+    private $username;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
-    private $avatar;
+    private ?string $avatar = null;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
     private $phone;
 
-    #[ORM\Column(type:"string", length:255, nullable:true)]
+    #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]
     private $name;
 
-    #[ORM\Column(type:"integer", nullable:true)]
+    #[ORM\Column(type:"integer", nullable:true, unique: true)]
     private $noSIRET;
+
+    #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatar')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(type:"datetime", nullable:true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Article::class, orphanRemoval: true)]
     private $articles;
@@ -53,11 +65,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contact::class)]
     private $contacts;
 
+    #[ORM\Column(type:"boolean")]
+    private $isBlocked = false;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
         $this->favoriteArticles = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        if ($this->name) {
+            return '[PRO] '.$this->name;
+        } elseif ($this->username) {
+            return '[INDIV] '.$this->username;
+        } else {
+            return $this->id.' - '.$this->email;
+        }
     }
 
     public function getId(): ?int
@@ -88,14 +114,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @deprecated since Symfony 5.3, use getUserIdentifier instead
-     */
-    public function getUsername(): string
-    {
-        return (string) $this->email;
-    }
-
-    /**
      * @see UserInterface
      */
     public function getRoles(): array
@@ -103,6 +121,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+        // add ROLE_BLOCKED if user is blocked
+        if ($this->isBlocked) {
+            $roles[] = 'ROLE_BLOCKED';
+        }
 
         return array_unique($roles);
     }
@@ -110,6 +132,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole(string $role): self
+    {
+        $this->roles[] = $role;
 
         return $this;
     }
@@ -149,14 +178,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getPseudo(): ?string
+    public function getUsername(): ?string
     {
-        return $this->pseudo;
+        return $this->username;
     }
 
-    public function setPseudo(?string $pseudo): self
+    public function setUsername(?string $username): self
     {
-        $this->pseudo = $pseudo;
+        $this->username = $username;
 
         return $this;
     }
@@ -295,4 +324,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function getIsBlocked(): ?bool
+    {
+        return $this->isBlocked;
+    }
+
+    public function setIsBlocked(bool $isBlocked): self
+    {
+        $this->isBlocked = $isBlocked;
+
+        return $this;
+    }
+    
 }
