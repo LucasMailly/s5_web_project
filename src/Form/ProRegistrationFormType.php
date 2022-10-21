@@ -17,10 +17,13 @@ class ProRegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
+            ->add('email' , null, [
+                'required' => true,
+            ])
             ->add('plainPassword', PasswordType::class, [
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
+                'label' => 'Mot de passe',
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -37,12 +40,18 @@ class ProRegistrationFormType extends AbstractType
             ])
             ->add('noSIRET', null, [
                 'required' => true,
+                'label' => 'Numéro SIRET',
             ])
             ->add('name', null, [
                 'required' => true,
+                'label' => 'Nom de l\'entreprise',
             ])
-            ->add('phone')
+            ->add('phone', null, [
+                'required' => true,
+                'label' => 'numéro de téléphone',
+            ])
             ->add('agreeTerms', CheckboxType::class, [
+                'label' => 'J\'accepte les conditions d\'utilisation',
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
