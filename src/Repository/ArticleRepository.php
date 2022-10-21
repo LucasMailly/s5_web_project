@@ -39,6 +39,27 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findMostRecents(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.dateParution', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    // get most favorite articles (by length of favoriteUsers array)
+    public function findMostFavorites(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('SIZE(a.favoriteUsers)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */
