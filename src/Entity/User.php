@@ -12,6 +12,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Serializable;
+use Symfony\Component\Validator\Constraints as Assert;
+
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
@@ -27,18 +29,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide .',
+    )]
+    #[Assert\notNull(message: 'L\'email est obligatoire')]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+        // max length allowed by Symfony for security reasons
+        max: 4096,
+    )]
     private $password;
 
     #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
     private $username;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
+    #[Assert\Regex(
+        pattern: "/^[0-9]*$/",
+        message: 'Le nom ne doit contenir que des chiffres',
+    )]
     private $phone;
 
     #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]

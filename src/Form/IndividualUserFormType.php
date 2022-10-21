@@ -13,11 +13,16 @@ class IndividualUserFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('password')
-            ->add('username')
-            ->add('phone')
-            ->add('name')
+            ->add('email', null, [
+                'required' => true,
+            ])
+            ->add('username', null, [
+                'required' => true,
+            ])
+            ->add('phone', null, [
+                'required' => true,
+
+            ])
             ->add('imageFile',VichImageType::class,['label' => 'photo de profil'])
 
         ;
