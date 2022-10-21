@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+    <h1>Article</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ article.id }}</td>
+            </tr>
+            <tr>
+                <th>Libelle</th>
+                <td>{{ article.libelle }}</td>
+            </tr>
+            <tr>
+                <th>ImgArticle</th>
+                <td>{{ article.imgArticle }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ article.price }}</td>
+            </tr>
+            <tr>
+                <th>DateParution</th>
+                <td>{{ article.dateParution ? article.dateParution|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Category</th>
+                <td>{{ article.category }}</td>
+            </tr>
+            <tr>
+                <th>Negotiation</th>
+                <td>{{ article.negotiation ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Opportunity</th>
+                <td>{{ article.opportunity ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>Quantity</th>
+                <td>{{ article.quantity }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_article_index') }}">back to list</a>
+
+    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+
+    {{ include('article/_delete_form.html.twig') }}
+{% endblock %}
