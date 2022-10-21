@@ -3,12 +3,17 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
+
+    {# search bar #}
+    <form action="{{ path('app_home') }}" method="get">
+        <input type="text" name="search" placeholder="Rechercher">
+        <button type="submit">Search</button>
+    </form>
     
     <h1>Articles populaires</h1>
     {% for article in mostFavoriteArticles %}
         <div >
-            {# <a href="{{ path('article_show', {'id': article.id}) }}"> #}
-            <a href="#">
+            <a href="{{ path('app_article_show', {'id': article.id}) }}">
                 <div>
                     <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
                     <h5 >{{ article.libelle }}</h5>
@@ -17,14 +22,13 @@
             </a>
         </div>
     {% else %}
-        <p>Aucun article n'a été trouvé.</p>
+        <p>Aucun article.</p>
     {% endfor %}
 
     <h1>Nouveautés</h1>
     {% for article in mostRecentArticles %}
         <div >
-            {# <a href="{{ path('article_show', {'id': article.id}) }}"> #}
-            <a href="#">
+            <a href="{{ path('app_article_show', {'id': article.id}) }}">
                 <div>
                     <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
                     <h5 >{{ article.libelle }}</h5>
@@ -33,7 +37,7 @@
             </a>
         </div>
     {% else %}
-        <p>Aucun article</p>
+        <p>Aucun article.</p>
     {% endfor %}
 
 {% endblock %}

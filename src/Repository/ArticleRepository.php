@@ -60,6 +60,32 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
+    public function search(string $search, int $limit, int $offset): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.libelle LIKE :search')
+            ->orWhere('a.category LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('a.dateParution', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function countSearch(string $search): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->where('a.libelle LIKE :search')
+            ->orWhere('a.category LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

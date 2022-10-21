@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+
+    {# search bar #}
+    <form action="{{ path('app_home') }}" method="get">
+        <input type="text" name="search" placeholder="Rechercher" value="{{ search }}">
+        <button type="submit">Search</button>
+    </form>
+    
+    <h1>Résultats pour : {{ search }}</h1>
+    
+    {# display results #}
+    {% for article in articles %}
+        <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+        <h5 >{{ article.libelle }}</h5>
+        <h5>{{ article.price }} €</h5>
+    {% else %}
+        <p>Aucun résultat.</p>
+    {% endfor %}
+        
+    {# pagination #}
+    <div>
+        {% if page > 1 %}
+            <a href="{{ path('app_home', {search: search, page: page - 1}) }}">Page précédente</a>
+        {% endif %}
+
+        {{ page }}
+
+        {% if page < nbPages %}
+            <a href="{{ path('app_home', {search: search, page: page + 1}) }}">Page suivante</a>
+        {% endif %}
+    </div>
+
+{% endblock %}
