@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
     #[Assert\Email(
         message: 'L\'email {{ value }} n\'est pas valide .',
     )]
-    #[Assert\notNull(message: 'L\'email est obligatoire')]
+    #[Assert\NotNull(message: 'L\'email est obligatoire')]
     private $email;
 
     #[ORM\Column(type: 'json')]
