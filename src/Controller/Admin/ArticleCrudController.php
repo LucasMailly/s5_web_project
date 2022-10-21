@@ -29,7 +29,7 @@ class ArticleCrudController extends AbstractCrudController
             TextField::new('imageFile', 'Image')->setFormType(VichImageType::class)->onlyOnForms(),
             ImageField::new('imgArticle', 'Image')->setBasePath('/uploads/images/articles')->onlyOnIndex(),
             AssociationField::new('author'),
-            MoneyField::new('price')->setCurrency('EUR'),
+            MoneyField::new('price')->setCurrency('EUR')->setNumDecimals(2)->setStoredAsCents(false),
             DateField::new('dateParution'),
             TextField::new('category'),
             BooleanField::new('negotiation'),

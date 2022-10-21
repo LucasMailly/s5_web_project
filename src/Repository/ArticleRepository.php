@@ -39,6 +39,53 @@ class ArticleRepository extends ServiceEntityRepository
         }
     }
 
+    public function findMostRecents(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.dateParution', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    // get most favorite articles (by length of favoriteUsers array)
+    public function findMostFavorites(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('SIZE(a.favoriteUsers)', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function search(string $search, int $limit, int $offset): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.libelle LIKE :search')
+            ->orWhere('a.category LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('a.dateParution', 'DESC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function countSearch(string $search): int
+    {
+        return $this->createQueryBuilder('a')
+            ->select('COUNT(a)')
+            ->where('a.libelle LIKE :search')
+            ->orWhere('a.category LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
 //    /**
 //     * @return Article[] Returns an array of Article objects
 //     */

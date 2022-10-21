@@ -13,6 +13,56 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
+
+    <nav>
+        {% block nav %}
+            <a href="{{ path('app_home') }}">Nom</a>
+            <div>
+                <ul>
+                    {% if app.user %}
+                        {% if 'ROLE_INDIVIDUAL' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+                            <li>
+                                <a href="{# path('app_article_index') #}">Articles</a>
+                            </li>
+                        {% elseif 'ROLE_PRO' in app.user.roles %}
+                            <li>
+                                <a href="{# path('app_article_manage') #}">Mes articles</a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+
+                    {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                        <li>
+                            <a href="{{ path('app_admin') }}">Dashboard</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{# path('app_contact') #}">Contact</a>
+                        </li>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <li>
+                            <a href="{{ path('app_logout') }}">Déconnexion</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_user_show', {'id': app.user.id}) }}">
+                                <img src="{{ avatars_path ~ '/' ~ (app.user.avatar ? app.user.avatar : "default.png") }}" alt="Avatar" width="50px" height="50px">
+                            </a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ path('app_login') }}">Connexion</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('app_register') }}">Inscription</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endblock %}
+    </nav>
+
     <body>
         {% block body %}{% endblock %}
     </body>
