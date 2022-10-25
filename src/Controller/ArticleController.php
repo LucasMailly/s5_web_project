@@ -3,12 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\User;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/article')]
 class ArticleController extends AbstractController
@@ -72,6 +75,30 @@ class ArticleController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $entityManager->remove($article);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
+    public function add(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $user->addArticle($article);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET'])]
+    public function drop(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    {
+        $user = $this->getUser();
+        if ($user) {
+            $user->dropArticle($article);
             $entityManager->flush();
         }
 

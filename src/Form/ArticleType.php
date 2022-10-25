@@ -6,6 +6,7 @@ use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class ArticleType extends AbstractType
 {
@@ -13,8 +14,6 @@ class ArticleType extends AbstractType
     {
         $builder
             ->add('libelle')
-            ->add('imgArticle')
-            ->add('updatedAt')
             ->add('price')
             ->add('dateParution')
             ->add('category')
@@ -23,6 +22,7 @@ class ArticleType extends AbstractType
             ->add('quantity')
             ->add('author')
             ->add('favoriteUsers')
+            ->add('imageFile', VichImageType::class,)
         ;
     }
 

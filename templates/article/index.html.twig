@@ -34,9 +34,14 @@
                 <td>{{ article.negotiation ? 'Yes' : 'No' }}</td>
                 <td>{{ article.opportunity ? 'Yes' : 'No' }}</td>
                 <td>{{ article.quantity }}</td>
+
                 <td>
+                    <a href="{{ path('app_article_add', {'id': article.id, 'add' : 'ajouterFavoris'}) }}">Ajouter aux favoris</a>
+                    <a href="{{ path('app_article_drop', {'id': article.id, 'drop' : 'retirerFavoris'}) }}">Retirer des favoris</a>
+
                     <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
                     <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
+
                 </td>
             </tr>
         {% else %}
