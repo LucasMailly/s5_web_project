@@ -19,17 +19,20 @@ class ProUserFormType extends AbstractType
 
             ->add('phone', null, [
                 'required' => true,
+                'label' => 'numéro de téléphone',
 
             ])
             ->add('name', null, [
                 'required' => true,
+                'label' => 'Nom de l\'entreprise',
 
             ])
             ->add('noSIRET', null, [
                 'required' => true,
+                'label' => 'Numéro SIRET',
 
             ])
-            ->add('imageFile',VichImageType::class,['label' => 'photo de profil'])
+            ->add('imageFile',VichImageType::class,['label' => 'photo de profil','required' => false])
         ;
     }
 

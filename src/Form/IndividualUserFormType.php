@@ -18,12 +18,14 @@ class IndividualUserFormType extends AbstractType
             ])
             ->add('username', null, [
                 'required' => true,
+                'label' => 'Nom d\'utilisateur',
             ])
             ->add('phone', null, [
                 'required' => true,
+                'label' => 'numéro de téléphone',
 
             ])
-            ->add('imageFile',VichImageType::class,['label' => 'photo de profil'])
+            ->add('imageFile',VichImageType::class,['label' => 'Photo de profil','required' => false])
 
         ;
     }
