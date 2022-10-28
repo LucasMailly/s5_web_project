@@ -20,7 +20,7 @@ class Article
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $imgArticle;
-
+    
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $updatedAt;
 
