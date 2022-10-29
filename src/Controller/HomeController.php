@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
+use App\Repository\HomepageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository, Request $request): Response
+    public function index(ArticleRepository $articleRepository, HomepageRepository $homepageRepository, Request $request): Response
     {
         // check if user search for something
         $search = $request->query->get('search');
@@ -35,11 +36,15 @@ class HomeController extends AbstractController
             ]);
         }
 
+        //Dynamic content choosed by the admin
+        $homepage = $homepageRepository->find(1);
+        $sections = $homepage->getSections();
+
         // if not, we render the normal homepage
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'mostRecentArticles' => $articleRepository->findMostRecents(),
-            'mostFavoriteArticles' => $articleRepository->findMostFavorites(),
+            'mostRecentArticles' => in_array('mostRecentArticles', $sections) ? $articleRepository->findMostRecents() : null,
+            'mostFavoriteArticles' => in_array('mostFavoriteArticles', $sections) ? $articleRepository->findMostFavorites() : null,
         ]);
     }
 }
