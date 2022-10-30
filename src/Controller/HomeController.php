@@ -37,7 +37,7 @@ class HomeController extends AbstractController
         }
 
         //Dynamic content choosed by the admin
-        $homepage = $homepageRepository->find(1);
+        $homepage = $homepageRepository->findAll()[0];
         $sections = $homepage->getSections();
 
         // if not, we render the normal homepage
