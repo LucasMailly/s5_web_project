@@ -86,7 +86,7 @@ class ArticleController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            $user->addArticle($article);
+            $user->addFavoriteArticle($article);
             $entityManager->flush();
         }
 
@@ -98,7 +98,7 @@ class ArticleController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            $user->dropArticle($article);
+            $user->removeFavoriteArticle($article);
             $entityManager->flush();
         }
 
