@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Serializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -20,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: ['name'], message: 'There is already an account with this name')]
 #[UniqueEntity(fields: ['noSIRET'], message: 'There is already an account with this noSIRET')]
 #[Vich\Uploadable]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
@@ -375,15 +374,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, Seriali
         $this->isBlocked = $isBlocked;
 
         return $this;
-    }
-
-    public function serialize()
-    {
-        return serialize($this->getId());
-    }
-
-    public function unserialize($serialized)
-    {
-        $this->id = unserialize($serialized);
     }
 }

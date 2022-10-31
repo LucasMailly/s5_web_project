@@ -22,7 +22,10 @@ class ArticleType extends AbstractType
             ->add('quantity')
             ->add('author')
             ->add('favoriteUsers')
-            ->add('imageFile', VichImageType::class,)
+            ->add('imageFile', VichImageType::class, [
+                'label' => 'Ajouter un article',
+                'required' => false,
+            ])
         ;
     }
 

@@ -104,4 +104,17 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/update/quantity/{id}/{update}', name: 'app_article_update_quantity', methods: ['GET'])]
+    public function updateQuantity(Article $article, $update, ArticleRepository $articleRepository): Response
+    {
+        if ($update == 'plus') {
+            $article->setQuantity($article->getQuantity() + 1);
+        }else{
+            $article->setQuantity($article->getQuantity()-1);
+        }
+        $articleRepository->add($article, true);
+
+        return $this->redirectToRoute('app_article_index');
+    }
 }
