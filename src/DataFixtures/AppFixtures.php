@@ -52,6 +52,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_INDIVIDUAL'],
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
             [
                 'username' => 'user2',
@@ -59,6 +60,7 @@ class AppFixtures extends Fixture
                 'password' => '123456',
                 'roles' => ['ROLE_INDIVIDUAL'],
                 'isBlocked' => true,
+                'phone' => '0606060606',
             ],
             [
                 'noSiret' => '458675',
@@ -68,6 +70,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_PRO'],
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/women/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
             [
                 'noSiret' => '326895',
@@ -77,6 +80,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_PRO'],
                 'isBlocked' => true,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
         ];
         //First delete old avatars
@@ -94,6 +98,7 @@ class AppFixtures extends Fixture
             $user_object->setPassword($this->passwordHasher->hashPassword($user_object, $user['password']));
             $user_object->setIsBlocked($user['isBlocked']);
             $user_object->setRoles($user['roles']);
+            $user_object->setPhone($user['phone'] ?? null);
             if (isset($user['avatar'])) {
                 $avatar = $this->curl_get_contents($user['avatar']);
                 $avatar_name = md5($user['avatar']) . '.jpg';
