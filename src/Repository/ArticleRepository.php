@@ -64,7 +64,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
     $qb = $this->createQueryBuilder('a');
 
-    $qb = $qb->where('a.libelle LIKE :search')
+    $qb = $qb->where('a.title LIKE :search')
         ->setParameter('search', '%'.$search.'%');
 
     if(isset($params['category'])){
