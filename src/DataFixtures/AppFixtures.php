@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Article;
 use App\Entity\Homepage;
 use App\Entity\User;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -14,11 +15,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository)
+    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository, ArticleRepository $articleRepository)
     {
         $this->slugger = $slugger;
         $this->passwordHasher = $userPasswordHasher;
         $this->userRepository = $userRepository;
+        $this->articleRepository = $articleRepository;
     }
 
     private function curl_get_contents($url)
@@ -162,6 +164,19 @@ class AppFixtures extends Fixture
             $users = $this->userRepository->findByRole('ROLE_PRO');
             $article->setAuthor($users[mt_rand(0, count($users) - 1)]);
             $manager->persist($article);
+        }
+
+        $manager->flush();
+
+        // Randomly favorite articles by users with role ROLE_INDIVIDUAL
+        $users = $this->userRepository->findByRole('ROLE_INDIVIDUAL');
+        $articles = $this->articleRepository->findAll();
+        foreach ($users as $user) {
+            $nb_articles_favorite = mt_rand(1, count($articles));
+            for ($i = 0; $i < $nb_articles_favorite; $i++) {
+                $user->addFavoriteArticle($articles[mt_rand(0, count($articles) - 1)]);
+            }
+            $manager->persist($user);
         }
 
         //Add the homepage entry
