@@ -16,7 +16,8 @@ class ArticleType extends AbstractType
             ->add('title')
             ->add('price')
             ->add('dateParution')
-            ->add('category')
+            ->add('category', ChoiceType::class, [
+              'choices'=>['Vêtement'=>'Vêtement','Voiture'=>'Voiture','Jardinage'=>'Jardinage','Matériaux'=>'Matériaux','Mobilier'=>'Mobilier'],])
             ->add('negotiation')
             ->add('used')
             ->add('quantity')
