@@ -26,7 +26,7 @@
                             </li>
                         {% elseif 'ROLE_PRO' in app.user.roles %}
                             <li>
-                                <a href="{# path('app_article_manage') #}">Mes articles</a>
+                                <a href="{{ path('app_article_dashboard') }}">Mes articles</a>
                             </li>
                         {% endif %}
                     {% endif %}
