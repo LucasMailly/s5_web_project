@@ -63,7 +63,7 @@ class ArticleRepository extends ServiceEntityRepository
     public function search(string $search, int $limit, int $offset): array
     {
         return $this->createQueryBuilder('a')
-            ->where('a.libelle LIKE :search')
+            ->where('a.title LIKE :search')
             ->orWhere('a.category LIKE :search')
             ->setParameter('search', '%'.$search.'%')
             ->orderBy('a.dateParution', 'DESC')
@@ -78,7 +78,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
-            ->where('a.libelle LIKE :search')
+            ->where('a.title LIKE :search')
             ->orWhere('a.category LIKE :search')
             ->setParameter('search', '%'.$search.'%')
             ->getQuery()
