@@ -68,13 +68,18 @@ class ArticleRepository extends ServiceEntityRepository
         ->setParameter('search', '%'.$search.'%');
 
     if(isset($params['category'])){
-      $qb=$qb->andWhere('a.category LIKE :category')
+      $qb=$qb->andWhere('a.category = :category')
         ->setParameter('category', $params['category']);
     }
 
     if (isset($params['priceMin']) && $params['priceMin'] !== '') {
         $qb = $qb->andWhere('a.price >= :priceMin')
             ->setParameter('priceMin', $params['priceMin']);
+    }
+
+    if (isset($params['priceMax']) && $params['priceMax'] !== '') {
+        $qb = $qb->andWhere('a.price >= :priceMax')
+            ->setParameter('priceMax', $params['priceMax']);
     }
 
     $qb = $qb->orderBy('a.dateParution', 'DESC')
