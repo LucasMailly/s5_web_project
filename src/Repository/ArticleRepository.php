@@ -90,7 +90,7 @@ class ArticleRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
-            ->where('a.libelle LIKE :search')
+            ->where('a.title LIKE :search')
             ->orWhere('a.category LIKE :search')
             ->setParameter('search', '%'.$search.'%')
             ->getQuery()

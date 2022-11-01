@@ -28,7 +28,7 @@
     {# display results #}
     {% for article in articles %}
         <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-        <h5 >{{ article.libelle }}</h5>
+        <h5 >{{ article.title }}</h5>
         <h5>{{ article.price }} €</h5>
     {% else %}
         <p>Aucun résultat.</p>

@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Article;
 use App\Entity\Homepage;
 use App\Entity\User;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -14,11 +15,12 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
-    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository)
+    public function __construct(SluggerInterface $slugger, UserPasswordHasherInterface $userPasswordHasher, UserRepository $userRepository, ArticleRepository $articleRepository)
     {
         $this->slugger = $slugger;
         $this->passwordHasher = $userPasswordHasher;
         $this->userRepository = $userRepository;
+        $this->articleRepository = $articleRepository;
     }
 
     private function curl_get_contents($url)
@@ -52,6 +54,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_INDIVIDUAL'],
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
             [
                 'username' => 'user2',
@@ -59,6 +62,7 @@ class AppFixtures extends Fixture
                 'password' => '123456',
                 'roles' => ['ROLE_INDIVIDUAL'],
                 'isBlocked' => true,
+                'phone' => '0606060606',
             ],
             [
                 'noSiret' => '458675',
@@ -68,6 +72,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_PRO'],
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/women/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
             [
                 'noSiret' => '326895',
@@ -77,6 +82,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_PRO'],
                 'isBlocked' => true,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
+                'phone' => '0606060606',
             ],
         ];
         //First delete old avatars
@@ -94,6 +100,7 @@ class AppFixtures extends Fixture
             $user_object->setPassword($this->passwordHasher->hashPassword($user_object, $user['password']));
             $user_object->setIsBlocked($user['isBlocked']);
             $user_object->setRoles($user['roles']);
+            $user_object->setPhone($user['phone'] ?? null);
             if (isset($user['avatar'])) {
                 $avatar = $this->curl_get_contents($user['avatar']);
                 $avatar_name = md5($user['avatar']) . '.jpg';
@@ -132,7 +139,7 @@ class AppFixtures extends Fixture
             }
         }
         //Then add articles and associated images and save them in database
-        foreach ($images as $libelle => $image_url) {
+        foreach ($images as $title => $image_url) {
             $article = new Article();
             // download image
             $image = file_get_contents($image_url[1]);
@@ -141,7 +148,7 @@ class AppFixtures extends Fixture
             file_put_contents($image_path, $image);
             $article->setImgArticle($image_name);
             
-            $article->setLibelle($libelle);
+            $article->setTitle($title);
             // random price
             $article->setPrice(mt_rand(10, 100));
             // random date
@@ -149,13 +156,27 @@ class AppFixtures extends Fixture
             $article->setUpdatedAt(new \DateTimeImmutable('now - '.mt_rand(0, 100).' days'));
             // random quantity
             $article->setQuantity(mt_rand(0, 100));
-            // first part of $libelle is the category
-            $article->setCategory(explode(' ', $libelle)[0]);
+            // first part of $title is the category
+            $article->setCategory(explode(' ', $title)[0]);
             $article->setNegotiation(mt_rand(0, 1));
-            $article->setOpportunity(mt_rand(0, 1));
-            $users = $this->userRepository->findAll();
+            $article->setUsed(mt_rand(0, 1));
+            // Get only user with role ROLE_PRO
+            $users = $this->userRepository->findByRole('ROLE_PRO');
             $article->setAuthor($users[mt_rand(0, count($users) - 1)]);
             $manager->persist($article);
+        }
+
+        $manager->flush();
+
+        // Randomly favorite articles by users with role ROLE_INDIVIDUAL
+        $users = $this->userRepository->findByRole('ROLE_INDIVIDUAL');
+        $articles = $this->articleRepository->findAll();
+        foreach ($users as $user) {
+            $nb_articles_favorite = mt_rand(1, count($articles));
+            for ($i = 0; $i < $nb_articles_favorite; $i++) {
+                $user->addFavoriteArticle($articles[mt_rand(0, count($articles) - 1)]);
+            }
+            $manager->persist($user);
         }
 
         //Add the homepage entry

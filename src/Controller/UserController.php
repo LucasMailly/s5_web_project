@@ -12,55 +12,40 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-#[Route('/user')]
+#[Route('/profile')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(): Response
     {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
 
-    // #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, UserRepository $userRepository): Response
-    // {
-    //     $user = new User();
-    //     $form = $this->createForm(UserType::class, $user);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $userRepository->add($user, true);
-
-    //         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('user/new.html.twig', [
-    //         'user' => $user,
-    //         'form' => $form,
-    //     ]);
-    // }
-
-    #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
-    {
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'user' => $this->getUser(),
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
 
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(Request $request, UserRepository $userRepository): Response
     {
-
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
 
         $form = null;
-        if (in_array('ROLE_INDIVIDUAL', $user->getRoles(), true)) {
+        if ( in_array('ROLE_ADMIN', $user->getRoles()) ) {
+            // Admin is not supposed to be able to edit his profile
+            // If he really wants to, he can do it in the admin panel, so we redirect him there
+            return $this->redirectToRoute('app_admin');
+        }
+        if ( in_array('ROLE_INDIVIDUAL', $user->getRoles(), true)) {
             $form = $this->createForm(IndividualUserFormType::class, $user);
             $form->handleRequest($request);}
-         if ( in_array('ROLE_PRO', $user->getRoles(), true)) {
+        if ( in_array('ROLE_PRO', $user->getRoles(), true)) {
             $form = $this->createForm(ProUserFormType::class, $user);
             $form->handleRequest($request);
         }
@@ -78,14 +63,27 @@ class UserController extends AbstractController
         ]);
     }
 
-
-    #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
+    #[Route('/delete', name: 'app_user_delete', methods: ['POST'])]
+    public function delete(Request $request, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
+        // We check if the user is logged in
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+        
+        if ( in_array('ROLE_ADMIN', $this->getUser()->getRoles()) ) {
+            // Admin is not supposed to be able to delete his profile
+            // If he really wants to, he can do it in the admin panel, so we redirect him there
+            return $this->redirectToRoute('app_admin');
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        if ($this->isCsrfTokenValid('delete', $request->request->get('_token'))) {
+            $userRepository->remove($user, true);
+            $request->getSession()->invalidate();
+            $this->container->get('security.token_storage')->setToken(null);
+        }
+
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

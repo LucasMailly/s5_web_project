@@ -19,7 +19,7 @@ class Article
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    private $title;
 
 
     #[ORM\Column(type: 'float')]
@@ -35,7 +35,7 @@ class Article
     private $negotiation;
 
     #[ORM\Column(type: 'boolean')]
-    private $opportunity;
+    private $used;
 
     #[ORM\Column(type: 'integer')]
     private $quantity;
@@ -69,14 +69,14 @@ class Article
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getTitle(): ?string
     {
-        return $this->libelle;
+        return $this->title;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setTitle(string $title): self
     {
-        $this->libelle = $libelle;
+        $this->title = $title;
 
         return $this;
     }
@@ -176,12 +176,12 @@ class Article
 
     public function isOpportunity(): ?bool
     {
-        return $this->opportunity;
+        return $this->used;
     }
 
-    public function setOpportunity(bool $opportunity): self
+    public function setUsed(bool $used): self
     {
-        $this->opportunity = $opportunity;
+        $this->used = $used;
 
         return $this;
     }
