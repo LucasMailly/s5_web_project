@@ -60,25 +60,42 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function search(string $search, int $limit, int $offset): array
+    public function search(string $search, int $limit, int $offset, array $params): array
     {
-        return $this->createQueryBuilder('a')
-            ->where('a.libelle LIKE :search')
-            ->orWhere('a.category LIKE :search')
-            ->setParameter('search', '%'.$search.'%')
-            ->orderBy('a.dateParution', 'DESC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
-            ->getQuery()
-            ->getResult()
-        ;
+    $qb = $this->createQueryBuilder('a');
+
+    $qb = $qb->where('a.title LIKE :search')
+        ->setParameter('search', '%'.$search.'%');
+
+    if(isset($params['category'])){
+      $qb=$qb->andWhere('a.category = :category')
+        ->setParameter('category', $params['category']);
+    }
+
+    if (isset($params['priceMin']) && $params['priceMin'] !== '') {
+        $qb = $qb->andWhere('a.price >= :priceMin')
+            ->setParameter('priceMin', $params['priceMin']);
+    }
+
+    if (isset($params['priceMax']) && $params['priceMax'] !== '') {
+        $qb = $qb->andWhere('a.price >= :priceMax')
+            ->setParameter('priceMax', $params['priceMax']);
+    }
+
+    $qb = $qb->orderBy('a.dateParution', 'DESC')
+    ->setMaxResults($limit)
+    ->setFirstResult($offset)
+    ->getQuery()
+    ->getResult();
+
+    return $qb;
     }
 
     public function countSearch(string $search): int
     {
         return $this->createQueryBuilder('a')
             ->select('COUNT(a)')
-            ->where('a.libelle LIKE :search')
+            ->where('a.title LIKE :search')
             ->orWhere('a.category LIKE :search')
             ->setParameter('search', '%'.$search.'%')
             ->getQuery()

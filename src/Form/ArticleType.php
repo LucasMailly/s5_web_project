@@ -7,21 +7,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ArticleType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelle')
+            ->add('title')
             ->add('price')
             ->add('dateParution')
-            ->add('category')
+            ->add('category', ChoiceType::class, [
+              'choices'=>['Vêtement'=>'Vêtement','Voiture'=>'Voiture','Jardinage'=>'Jardinage','Matériaux'=>'Matériaux','Mobilier'=>'Mobilier'],])
             ->add('negotiation')
-            ->add('opportunity')
+            ->add('used')
             ->add('quantity')
-            ->add('author')
-            ->add('favoriteUsers')
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Ajouter un article',
                 'required' => false,

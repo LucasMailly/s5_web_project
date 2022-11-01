@@ -139,7 +139,7 @@ class AppFixtures extends Fixture
             }
         }
         //Then add articles and associated images and save them in database
-        foreach ($images as $libelle => $image_url) {
+        foreach ($images as $title => $image_url) {
             $article = new Article();
             // download image
             $image = file_get_contents($image_url[1]);
@@ -148,7 +148,7 @@ class AppFixtures extends Fixture
             file_put_contents($image_path, $image);
             $article->setImgArticle($image_name);
             
-            $article->setLibelle($libelle);
+            $article->setTitle($title);
             // random price
             $article->setPrice(mt_rand(10, 100));
             // random date
@@ -156,10 +156,10 @@ class AppFixtures extends Fixture
             $article->setUpdatedAt(new \DateTimeImmutable('now - '.mt_rand(0, 100).' days'));
             // random quantity
             $article->setQuantity(mt_rand(0, 100));
-            // first part of $libelle is the category
-            $article->setCategory(explode(' ', $libelle)[0]);
+            // first part of $title is the category
+            $article->setCategory(explode(' ', $title)[0]);
             $article->setNegotiation(mt_rand(0, 1));
-            $article->setOpportunity(mt_rand(0, 1));
+            $article->setUsed(mt_rand(0, 1));
             // Get only user with role ROLE_PRO
             $users = $this->userRepository->findByRole('ROLE_PRO');
             $article->setAuthor($users[mt_rand(0, count($users) - 1)]);

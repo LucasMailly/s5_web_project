@@ -25,7 +25,7 @@ class ArticleCrudController extends AbstractCrudController
     {
         return [
             IdField::new('id')->onlyOnIndex(),
-            TextField::new('libelle'),
+            TextField::new('title'),
             TextField::new('imageFile', 'Image')->setFormType(VichImageType::class)->onlyOnForms(),
             ImageField::new('imgArticle', 'Image')->setBasePath('/uploads/images/articles')->onlyOnIndex(),
             AssociationField::new('author'),
@@ -33,7 +33,7 @@ class ArticleCrudController extends AbstractCrudController
             DateField::new('dateParution'),
             TextField::new('category'),
             BooleanField::new('negotiation'),
-            BooleanField::new('opportunity'),
+            BooleanField::new('used'),
             IntegerField::new('quantity'),
         ];
     }
