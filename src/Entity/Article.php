@@ -35,7 +35,7 @@ class Article
     private $negotiation;
 
     #[ORM\Column(type: 'boolean')]
-    private $opportunity;
+    private $used;
 
     #[ORM\Column(type: 'integer')]
     private $quantity;
@@ -176,12 +176,12 @@ class Article
 
     public function isOpportunity(): ?bool
     {
-        return $this->opportunity;
+        return $this->used;
     }
 
-    public function setOpportunity(bool $opportunity): self
+    public function setUsed(bool $used): self
     {
-        $this->opportunity = $opportunity;
+        $this->used = $used;
 
         return $this;
     }

@@ -159,7 +159,7 @@ class AppFixtures extends Fixture
             // first part of $title is the category
             $article->setCategory(explode(' ', $title)[0]);
             $article->setNegotiation(mt_rand(0, 1));
-            $article->setOpportunity(mt_rand(0, 1));
+            $article->setUsed(mt_rand(0, 1));
             // Get only user with role ROLE_PRO
             $users = $this->userRepository->findByRole('ROLE_PRO');
             $article->setAuthor($users[mt_rand(0, count($users) - 1)]);
