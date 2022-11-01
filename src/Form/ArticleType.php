@@ -20,8 +20,6 @@ class ArticleType extends AbstractType
             ->add('negotiation')
             ->add('opportunity')
             ->add('quantity')
-            ->add('author')
-            ->add('favoriteUsers')
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Ajouter un article',
                 'required' => false,
