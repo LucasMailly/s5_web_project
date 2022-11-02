@@ -67,7 +67,7 @@ class ArticleRepository extends ServiceEntityRepository
     $qb = $qb->where('a.title LIKE :search')
         ->setParameter('search', '%'.$search.'%');
 
-    if(isset($params['category'])){
+    if(isset($params['category'])&& $params['category'] !== 'Tout'){
       $qb=$qb->andWhere('a.category = :category')
         ->setParameter('category', $params['category']);
     }
@@ -78,8 +78,18 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     if (isset($params['priceMax']) && $params['priceMax'] !== '') {
-        $qb = $qb->andWhere('a.price >= :priceMax')
+        $qb = $qb->andWhere('a.price <= :priceMax')
             ->setParameter('priceMax', $params['priceMax']);
+    }
+
+    if(isset($params['dateParution'])){
+      $qb=$qb->andWhere('a.dateParution >= :dateParution')
+        ->setParameter('dateParution', $params['dateParution']);
+    }
+
+    if(isset($params['used'])){
+      $qb=$qb->andWhere('a.used = :used')
+        ->setParameter('used', $params['used']);
     }
 
     $qb = $qb->orderBy('a.dateParution', 'DESC')

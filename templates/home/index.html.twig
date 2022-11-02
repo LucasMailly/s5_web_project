@@ -6,10 +6,32 @@
 
     {# search bar #}
     <form action="{{ path('app_home') }}" method="get">
-        <input type="text" name="search" placeholder="Rechercher">
-        <button type="submit">Search</button>
+    <p>
+    <select name="category">
+    <option value="Tout">Tout</option>
+    <option value="Vetement">Vêtement</option>
+    <option value="Voiture">Voiture</option>
+    <option value="Jardinage">Jardinage</option>
+    <option value="Materiaux">Matériaux</option>
+    <option value="Mobilier">Mobilier</option>
+    </select>
+
+    <input type="text" name="search" placeholder="Rechercher" value="{{ search ?? '' }}"">
+
+    <input name="priceMin" type="text" placeholder="Prix minimum"/>
+    <input name="priceMax" type="text" placeholder="Prix maximum"/>
+
+    <input type="date" name="dateParution" min="2018-01-01" max="2100-12-31">
+    Occasion:
+    <input type="radio" id="yes" name="used" value="1">
+    <label for="yes">Oui</label>
+    <input type="radio" id="no" name="used" value="0">
+    <label for="no">Non</label>
+
+    <button type="submit">Search</button>
+    </p>
     </form>
-    
+
     {% if mostRecentArticles is not null %}
         <h1>Articles populaires</h1>
         {% for article in mostFavoriteArticles %}
