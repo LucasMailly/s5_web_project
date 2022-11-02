@@ -39,7 +39,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/article/\d+, roles: ROLE_USER }
+        - { path: ^/article/\d+, roles: PUBLIC_ACCESS }
         - { path: ^/article/favorite, roles: ROLE_USER }
         - { path: ^/article, roles: ROLE_PRO }
     
