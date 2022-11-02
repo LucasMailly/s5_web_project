@@ -41,7 +41,14 @@
             </tr>
             <tr>
                 <th>Quantity</th>
-                <td>{{ article.quantity }}</td>
+                <td>{{ article.quantity }}
+                    {# read and display just one flash message type #}
+                    {% for message in app.flashes('notice') %}
+                        <div class="flash-notice">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </td>
             </tr>
         </tbody>
     </table>

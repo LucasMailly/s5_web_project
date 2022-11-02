@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 
+
+
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
@@ -158,8 +160,14 @@ class ArticleController extends AbstractController
 
         if ($update == 'plus') {
             $article->setQuantity($article->getQuantity() + 1);
-        }else{
+        }else if ($update == 'minus' && $article->getQuantity() > 0) {
             $article->setQuantity($article->getQuantity()-1);
+            }
+        if ($article->getQuantity() == 0){
+            $this->addFlash(
+                'notice',
+                'Rupture de Stock'
+            );
         }
         $articleRepository->add($article, true);
 
