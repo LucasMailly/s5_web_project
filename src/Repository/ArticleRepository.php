@@ -82,12 +82,12 @@ class ArticleRepository extends ServiceEntityRepository
             ->setParameter('priceMax', $params['priceMax']);
     }
 
-    if(isset($params['dateParution'])){
+    if(isset($params['dateParution']) && $params['dateParution'] !== ''){
       $qb=$qb->andWhere('a.dateParution >= :dateParution')
         ->setParameter('dateParution', $params['dateParution']);
     }
 
-    if(isset($params['used'])){
+    if(isset($params['used']) && $params['used'] !== ''){
       $qb=$qb->andWhere('a.used = :used')
         ->setParameter('used', $params['used']);
     }
