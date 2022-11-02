@@ -16,7 +16,7 @@ class HomeController extends AbstractController
         // check if user search for something
         $search = $request->query->get('search');
         // if he does, then we get the articles that match the search
-        if ($search && $search !== '') {
+        if ($search !== null) {
             $page = $request->query->get('page', 1);
             if ($page < 1) {
                 $page = 1;
