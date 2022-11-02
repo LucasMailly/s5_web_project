@@ -23,7 +23,7 @@ class HomeController extends AbstractController
             }
             $limit = 20;
             $offset = ($page - 1) * $limit;
-            $articles = $articleRepository->search($search, $limit, $offset);
+            $articles = $articleRepository->search($search, $limit, $offset, $request->query->all());
             $total = $articleRepository->countSearch($search);
             $nbPages = ceil($total / $limit);
 
@@ -32,6 +32,7 @@ class HomeController extends AbstractController
                 'page' => $page,
                 'nbPages' => $nbPages,
                 'search' => $search,
+
             ]);
         }
 

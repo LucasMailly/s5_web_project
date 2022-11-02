@@ -8,8 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[Vich\Uploadable]
 class Article
 {
     #[ORM\Id]
@@ -18,13 +21,8 @@ class Article
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $libelle;
+    private $title;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $imgArticle;
-    
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $updatedAt;
 
     #[ORM\Column(type: 'float')]
     private $price;
@@ -39,10 +37,20 @@ class Article
     private $negotiation;
 
     #[ORM\Column(type: 'boolean')]
-    private $opportunity;
+    private $used;
 
     #[ORM\Column(type: 'integer')]
     private $quantity;
+
+
+    #[Vich\UploadableField(mapping: 'article_images', fileNameProperty: 'imgArticle')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+    private ?string $imgArticle = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'articles')]
     #[ORM\JoinColumn(nullable: false)]
@@ -63,14 +71,14 @@ class Article
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getTitle(): ?string
     {
-        return $this->libelle;
+        return $this->title;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setTitle(string $title): self
     {
-        $this->libelle = $libelle;
+        $this->title = $title;
 
         return $this;
     }
@@ -92,6 +100,9 @@ class Article
         return $this->imageFile;
     }
 
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
     public function setImageFile(?File $imageFile): self
     {
         $this->imageFile = $imageFile;
@@ -165,14 +176,14 @@ class Article
         return $this;
     }
 
-    public function isOpportunity(): ?bool
+    public function isUsed(): ?bool
     {
-        return $this->opportunity;
+        return $this->used;
     }
 
-    public function setOpportunity(bool $opportunity): self
+    public function setUsed(bool $used): self
     {
-        $this->opportunity = $opportunity;
+        $this->used = $used;
 
         return $this;
     }

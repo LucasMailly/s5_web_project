@@ -6,21 +6,34 @@
 
     {# search bar #}
     <form action="{{ path('app_home') }}" method="get">
+
+        <select name="category">
+        <option value="Vetement">Vêtement</option>
+        <option value="Voiture">Voiture</option>
+        <option value="Jardinage">Jardinage</option>
+        <option value="Materiaux">Matériaux</option>
+        <option value="Mobilier">Mobilier</option>
+        </select>
+
         <input type="text" name="search" placeholder="Rechercher" value="{{ search }}">
+
+        <input name="priceMin" type="text" placeholder="Prix minimum"/>
+        <input name="priceMax" type="text" placeholder="Prix maximum"/>
+
         <button type="submit">Search</button>
     </form>
-    
+
     <h1>Résultats pour : {{ search }}</h1>
-    
+
     {# display results #}
     {% for article in articles %}
         <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-        <h5 >{{ article.libelle }}</h5>
+        <h5 >{{ article.title }}</h5>
         <h5>{{ article.price }} €</h5>
     {% else %}
         <p>Aucun résultat.</p>
     {% endfor %}
-        
+
     {# pagination #}
     <div>
         {% if page > 1 %}

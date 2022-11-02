@@ -10,20 +10,38 @@
         <button type="submit">Search</button>
     </form>
     
-    <h1>Articles populaires</h1>
-    {% for article in mostFavoriteArticles %}
-        <div >
-            <a href="{{ path('app_article_show', {'id': article.id}) }}">
-                <div>
-                    <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-                    <h5 >{{ article.libelle }}</h5>
-                    <h5>{{ article.price }} €</h5>
-                </div>
-            </a>
-        </div>
-    {% else %}
-        <p>Aucun article.</p>
-    {% endfor %}
+    {% if mostRecentArticles is not null %}
+        <h1>Articles populaires</h1>
+        {% for article in mostFavoriteArticles %}
+            <div >
+                <a href="{{ path('app_article_show', {'id': article.id}) }}">
+                    <div>
+                        <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                        <h5 >{{ article.title }}</h5>
+                        <h5>{{ article.price }} €</h5>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <p>Aucun article trouvé</p>
+        {% endfor %}
+    {% endif %}
+
+    {% if mostFavoriteArticles is not null %}
+        <h1>Nouveautés</h1>
+        {% for article in mostRecentArticles %}
+            <div >
+                <a href="{{ path('app_article_show', {'id': article.id}) }}">
+                    <div>
+                        <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                        <h5 >{{ article.title }}</h5>
+                        <h5>{{ article.price }} €</h5>
+                    </div>
+                </a>
+        {% else %}
+            <p>Aucun article trouvé</p>
+        {% endfor %}
+    {% endif %}
 
     <h1>Nouveautés</h1>
     {% for article in mostRecentArticles %}
@@ -31,7 +49,7 @@
             <a href="{{ path('app_article_show', {'id': article.id}) }}">
                 <div>
                     <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-                    <h5 >{{ article.libelle }}</h5>
+                    <h5 >{{ article.title }}</h5>
                     <h5>{{ article.price }} €</h5>
                 </div>
             </a>

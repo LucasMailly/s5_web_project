@@ -20,13 +20,9 @@
             <div>
                 <ul>
                     {% if app.user %}
-                        {% if 'ROLE_INDIVIDUAL' in app.user.roles or 'ROLE_ADMIN' in app.user.roles %}
+                        {% if 'ROLE_PRO' in app.user.roles %}
                             <li>
-                                <a href="{# path('app_article_index') #}">Articles</a>
-                            </li>
-                        {% elseif 'ROLE_PRO' in app.user.roles %}
-                            <li>
-                                <a href="{# path('app_article_manage') #}">Mes articles</a>
+                                <a href="{{ path('app_article_dashboard') }}">Mes articles</a>
                             </li>
                         {% endif %}
                     {% endif %}
@@ -37,7 +33,7 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{# path('app_contact') #}">Contact</a>
+                            <a href="{{ path('app_contact') }}">Contact</a>
                         </li>
                     {% endif %}
 
@@ -46,7 +42,7 @@
                             <a href="{{ path('app_logout') }}">Déconnexion</a>
                         </li>
                         <li>
-                            <a href="{{ path('app_user_show', {'id': app.user.id}) }}">
+                            <a href="{{ path('app_user_index') }}">
                                 <img src="{{ avatars_path ~ '/' ~ (app.user.avatar ? app.user.avatar : "default.png") }}" alt="Avatar" width="50px" height="50px">
                             </a>
                         </li>

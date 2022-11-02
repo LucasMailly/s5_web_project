@@ -20,7 +20,7 @@ security:
             logout:
                 path: app_logout
                 # where to redirect after logout
-                # target: app_any_route
+                target: app_home
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -28,12 +28,21 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
+    role_hierarchy:
+        ROLE_INDIVIDUAL: ROLE_USER
+        ROLE_PRO: ROLE_USER
+        ROLE_ADMIN: [ROLE_PRO, ROLE_INDIVIDUAL]
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/article/\d+, roles: ROLE_USER }
+        - { path: ^/article/favorite, roles: ROLE_USER }
+        - { path: ^/article, roles: ROLE_PRO }
+    
 when@test:
     security:
         password_hashers:

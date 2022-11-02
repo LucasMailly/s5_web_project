@@ -16,26 +16,41 @@ use Doctrine\ORM\EntityManagerInterface;
 #[Route('/article')]
 class ArticleController extends AbstractController
 {
-    #[Route('/', name: 'app_article_index', methods: ['GET'])]
+    //pro dashboard 
+    #[Route('/', name: 'app_article_dashboard', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articleRepository->findBy(['author' => $user]),
         ]);
     }
 
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
+        }
+        $user = $this->getUser();
+
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $article->setAuthor($user);
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('article/new.html.twig', [
@@ -47,6 +62,10 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
@@ -55,13 +74,23 @@ class ArticleController extends AbstractController
     #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($article->getAuthor() != $this->getUser()) {
+            return $this->redirectToRoute('app_article_dashboard');
+        }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
+        }
+
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('article/edit.html.twig', [
@@ -73,12 +102,19 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($article->getAuthor() != $this->getUser()) {
+            return new Response('You are not the author!', 403);
+        }
+
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
             $entityManager->remove($article);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
@@ -86,11 +122,12 @@ class ArticleController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            $user->addArticle($article);
+            $user->addFavoriteArticle($article);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        // redirect to previous page
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET'])]
@@ -98,16 +135,27 @@ class ArticleController extends AbstractController
     {
         $user = $this->getUser();
         if ($user) {
-            $user->dropArticle($article);
+            $user->removeFavoriteArticle($article);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+        // redirect to previous page
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/update/quantity/{id}/{update}', name: 'app_article_update_quantity', methods: ['GET'])]
-    public function updateQuantity(Article $article, $update, ArticleRepository $articleRepository): Response
+    public function updateQuantity(Request $request, Article $article, $update, ArticleRepository $articleRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($article->getAuthor() != $this->getUser()) {
+            return $this->redirectToRoute('app_article_dashboard');
+        }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
+        }
+
         if ($update == 'plus') {
             $article->setQuantity($article->getQuantity() + 1);
         }else{
@@ -115,6 +163,7 @@ class ArticleController extends AbstractController
         }
         $articleRepository->add($article, true);
 
-        return $this->redirectToRoute('app_article_index');
+        // redirect to previous page
+        return $this->redirect($request->headers->get('referer'));
     }
 }

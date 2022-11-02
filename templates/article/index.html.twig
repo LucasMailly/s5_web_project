@@ -3,58 +3,22 @@
 {% block title %}Article index{% endblock %}
 
 {% block body %}
-    <h1>Article index</h1>
+    <h1>Mes Articles</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Libelle</th>
-                <th>ImgArticle</th>
-                <th>UpdatedAt</th>
-                <th>Price</th>
-                <th>DateParution</th>
-                <th>Category</th>
-                <th>Negotiation</th>
-                <th>Opportunity</th>
-                <th>Quantity</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for article in articles %}
-            <tr>
-                <td>{{ article.id }}</td>
-                <td>{{ article.libelle }}</td>
-                <td>{{ article.imgArticle }}</td>
-                <td>{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ article.price }}</td>
-                <td>{{ article.dateParution ? article.dateParution|date('Y-m-d') : '' }}</td>
-                <td>{{ article.category }}</td>
-                <td>{{ article.negotiation ? 'Yes' : 'No' }}</td>
-                <td>{{ article.opportunity ? 'Yes' : 'No' }}</td>
-                <td>{{ article.quantity }}</td>
+    {% if not is_granted('ROLE_BLOCKED') %}
+        <a href="{{ path('app_article_new') }}">Ajouter un article</a>
+    {% endif %}
 
-                <td>
-                    <a href="{{ path('app_article_add', {'id': article.id, 'add' : 'ajouterFavoris'}) }}">Ajouter aux favoris</a>
-                    <a href="{{ path('app_article_drop', {'id': article.id, 'drop' : 'retirerFavoris'}) }}">Retirer des favoris</a>
-
-                    <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update' : 'plus'}) }}">Quantité +1</a>
-                    <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update' : 'moins'}) }}">Quantité -1</a>
-
-
-                    <a href="{{ path('app_article_show', {'id': article.id}) }}">show</a>
-                    <a href="{{ path('app_article_edit', {'id': article.id}) }}">edit</a>
-
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="11">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_article_new') }}">Create new</a>
+    {% for article in articles %}
+        <a href="{{ path('app_article_show', {'id': article.id}) }}">
+            <div>
+                <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                <h5>{{ article.title }}</h5>
+                <h5>{{ article.price }} €</h5>
+                <h5>Stock: {{article.quantity}}</h5>
+            </div>
+        </a>
+    {% else %}
+        <p>no records found</p>
+    {% endfor %}
 {% endblock %}
