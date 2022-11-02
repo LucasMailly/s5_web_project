@@ -36,6 +36,9 @@ class ArticleController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
+        }
         $user = $this->getUser();
 
         $article = new Article();
@@ -62,9 +65,6 @@ class ArticleController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        if ($article->getAuthor() != $this->getUser()) {
-            return $this->redirectToRoute('app_article_dashboard');
-        }
 
         return $this->render('article/show.html.twig', [
             'article' => $article,
@@ -79,6 +79,9 @@ class ArticleController extends AbstractController
         }
         if ($article->getAuthor() != $this->getUser()) {
             return $this->redirectToRoute('app_article_dashboard');
+        }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
         }
 
         $form = $this->createForm(ArticleType::class, $article);
@@ -103,7 +106,7 @@ class ArticleController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
         if ($article->getAuthor() != $this->getUser()) {
-            return $this->redirectToRoute('app_article_dashboard');
+            return new Response('You are not the author!', 403);
         }
 
         if ($this->isCsrfTokenValid('delete'.$article->getId(), $request->request->get('_token'))) {
@@ -143,6 +146,16 @@ class ArticleController extends AbstractController
     #[Route('/update/quantity/{id}/{update}', name: 'app_article_update_quantity', methods: ['GET'])]
     public function updateQuantity(Request $request, Article $article, $update, ArticleRepository $articleRepository): Response
     {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if ($article->getAuthor() != $this->getUser()) {
+            return $this->redirectToRoute('app_article_dashboard');
+        }
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
+        }
+
         if ($update == 'plus') {
             $article->setQuantity($article->getQuantity() + 1);
         }else{

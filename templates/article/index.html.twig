@@ -5,7 +5,9 @@
 {% block body %}
     <h1>Mes Articles</h1>
 
-    <a href="{{ path('app_article_new') }}">Ajouter un article</a>
+    {% if not is_granted('ROLE_BLOCKED') %}
+        <a href="{{ path('app_article_new') }}">Ajouter un article</a>
+    {% endif %}
 
     {% for article in articles %}
         <a href="{{ path('app_article_show', {'id': article.id}) }}">
@@ -19,6 +21,4 @@
     {% else %}
         <p>no records found</p>
     {% endfor %}
-
-    <a href="{{ path('app_article_new') }}">Create new</a>
 {% endblock %}
