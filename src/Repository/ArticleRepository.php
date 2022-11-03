@@ -60,7 +60,7 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function search(string $search, int $limit, int $offset, array $params): array
+    public function search(string $search, array $params): array
     {
     $qb = $this->createQueryBuilder('a');
 
@@ -93,24 +93,10 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     $qb = $qb->orderBy('a.dateParution', 'DESC')
-    ->setMaxResults($limit)
-    ->setFirstResult($offset)
     ->getQuery()
     ->getResult();
 
     return $qb;
-    }
-
-    public function countSearch(string $search): int
-    {
-        return $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->where('a.title LIKE :search')
-            ->orWhere('a.category LIKE :search')
-            ->setParameter('search', '%'.$search.'%')
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
     }
 
 //    /**
