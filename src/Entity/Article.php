@@ -163,7 +163,7 @@ class Article
         return $this;
     }
 
-    public function isOpportunity(): ?bool
+    public function isUsed(): ?bool
     {
         return $this->used;
     }

@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,14 +17,16 @@ class ArticleType extends AbstractType
             ->add('title')
             ->add('price')
             ->add('dateParution')
-            ->add('category', ChoiceType::class, [
-              'choices'=>['Vêtement'=>'Vêtement','Voiture'=>'Voiture','Jardinage'=>'Jardinage','Matériaux'=>'Matériaux','Mobilier'=>'Mobilier'],])
             ->add('negotiation')
             ->add('used')
             ->add('quantity')
             ->add('imageFile', VichImageType::class, [
                 'label' => 'Ajouter un article',
                 'required' => false,
+            ])
+            ->add('category', null, [
+                'class' => Category::class,
+                'choice_label' => 'name',
             ])
         ;
     }

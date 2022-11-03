@@ -39,6 +39,14 @@ class CategoryRepository extends ServiceEntityRepository
         }
     }
 
+    //request to add category
+    public function addCategory(string $name): void
+    {
+        $category = new Category();
+        $category->setName($name);
+        $this->save($category, true);
+    }
+
 //    /**
 //     * @return Category[] Returns an array of Category objects
 //     */
