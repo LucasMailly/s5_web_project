@@ -9,12 +9,10 @@
         <p>
         Catégorie:
         <select name="category">
-        <option value="Tout">Tout</option>
-        <option value="Vetement">Vêtement</option>
-        <option value="Voiture">Voiture</option>
-        <option value="Jardinage">Jardinage</option>
-        <option value="Materiaux">Matériaux</option>
-        <option value="Mobilier">Mobilier</option>
+            //option in function of category
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
         </select>
 
         <input type="text" name="search" placeholder="Rechercher" value="{{ search }}">

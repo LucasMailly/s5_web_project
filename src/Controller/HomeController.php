@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use Knp\Component\Pager\PaginatorInterface;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(ArticleRepository $articleRepository,CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // check if user search for something
         $search = $request->query->get('search');
@@ -26,9 +27,11 @@ class HomeController extends AbstractController
                 $request->query->getInt('page', 1),
                 $limit
             );
+            $categories = $categoryRepository->findAll();
 
             return $this->render('home/search.html.twig', [
                 'articles' => $articles,
+                'categories' => $categories,
                 'search' => $search,
             ]);
         }

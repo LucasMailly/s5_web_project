@@ -65,11 +65,12 @@ class ArticleRepository extends ServiceEntityRepository
     $qb = $this->createQueryBuilder('a');
 
     $qb = $qb->where('a.title LIKE :search')
+        ->InnerJoin('a.category', 'c')
         ->setParameter('search', '%'.$search.'%');
 
-    if(isset($params['category'])&& $params['category'] !== 'Tout'){
-      $qb=$qb->andWhere('a.category = :category')
-        ->setParameter('category', $params['category']);
+    if(isset($params['c.name ']) && $params['category'] !== 'Tout'){
+        $qb = $qb->andWhere('c.name = :category')
+            ->setParameter('category', $params['c.name ']);
     }
 
     if (isset($params['priceMin']) && $params['priceMin'] !== '') {
