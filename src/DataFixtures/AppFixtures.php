@@ -115,6 +115,7 @@ class AppFixtures extends Fixture
             $user_object->setEmail($user['email']);
             $user_object->setPassword($this->passwordHasher->hashPassword($user_object, $user['password']));
             $user_object->setIsBlocked($user['isBlocked']);
+            $user_object->setIsVerified($user['isVerified']);
             $user_object->setRoles($user['roles']);
             $user_object->setPhone($user['phone'] ?? null);
             if (isset($user['avatar'])) {
