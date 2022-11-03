@@ -92,7 +92,11 @@ class ArticleRepository extends ServiceEntityRepository
         ->setParameter('used', $params['used']);
     }
 
-    $qb = $qb->orderBy('a.dateParution', 'DESC')
+    if (array_key_exists('order-price', $params) && $params['order-price'] !== ''){
+              $qb=$qb->addOrderBy('a.price', $params['order-price']);
+    }
+
+    $qb = $qb->addOrderBy('a.dateParution', 'DESC')
     ->setMaxResults($limit)
     ->setFirstResult($offset)
     ->getQuery()
