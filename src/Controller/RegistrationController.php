@@ -44,6 +44,7 @@ class RegistrationController extends AbstractController
         }
 
         // Verify the user id exists in persistence
+        /** @var User $user */
         $user = $userRepository->find($id);
         if (null === $user) {
             return $this->redirectToRoute('app_register');
@@ -62,9 +63,6 @@ class RegistrationController extends AbstractController
         $user->setIsVerified(true);
         $entityManager->persist($user);
         $entityManager->flush();
-
-        // Login the user automatically upon verification
-        $this->authenticateUser($user);
 
         $this->addFlash('success', 'Votre email a été vérifié!');
 
@@ -117,10 +115,12 @@ class RegistrationController extends AbstractController
             try {
                 $this->mailer->send($email);
             } catch (TransportExceptionInterface $e) {
-                dd('error sending email');
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                return $this->redirectToRoute('app_register');
             }
 
             $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register-pro.html.twig', [
@@ -156,13 +156,31 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            // do anything else you need here, like send an email
-
-            return $userAuthenticator->authenticateUser(
-                $user,
-                $authenticator,
-                $request
+            
+            // generate a signed url and email it to the user
+            $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                'app_verify',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()]
             );
+            
+            $email = (new Email())
+                ->from('no-reply@localhost')
+                ->to($user->getEmail())
+                ->subject('Please Confirm your Email')
+                ->html("Please confirm your email by clicking on this link: <a href=\"{$signatureComponents->getSignedUrl()}\">Confirm your email</a>");
+            
+            
+            try {
+                $this->mailer->send($email);
+            } catch (TransportExceptionInterface $e) {
+                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                return $this->redirectToRoute('app_register');
+            }
+
+            $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
+            return $this->redirectToRoute('app_login');
         }
 
         return $this->render('registration/register-individual.html.twig', [
