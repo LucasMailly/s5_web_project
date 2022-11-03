@@ -16,14 +16,14 @@ class HomeController extends AbstractController
         // check if user search for something
         $search = $request->query->get('search');
         // if he does, then we get the articles that match the search
-        if ($search && $search !== '') {
+        if ($search !== null) {
             $page = $request->query->get('page', 1);
             if ($page < 1) {
                 $page = 1;
             }
             $limit = 20;
             $offset = ($page - 1) * $limit;
-            $articles = $articleRepository->search($search, $limit, $offset);
+            $articles = $articleRepository->search($search, $limit, $offset, $request->query->all());
             $total = $articleRepository->countSearch($search);
             $nbPages = ceil($total / $limit);
 
@@ -32,6 +32,7 @@ class HomeController extends AbstractController
                 'page' => $page,
                 'nbPages' => $nbPages,
                 'search' => $search,
+
             ]);
         }
 

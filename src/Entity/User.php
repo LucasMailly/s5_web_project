@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -27,21 +28,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[Assert\Email(
+        message: 'L\'email {{ value }} n\'est pas valide .',
+    )]
+    #[Assert\NotNull(message: 'L\'email est obligatoire')]
     private $email;
 
     #[ORM\Column(type: 'json')]
     private $roles = [];
 
     #[ORM\Column(type: 'string')]
+    #[Assert\Length(
+        min: 6,
+        minMessage: 'Votre mot de passe doit contenir au moins {{ limit }} caractères',
+        // max length allowed by Symfony for security reasons
+        max: 4096,
+    )]
     private $password;
 
     #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
     private $username;
 
     #[ORM\Column(type:"string", length:255, nullable:true)]
-    private ?string $avatar = null;
-
-    #[ORM\Column(type:"string", length:255, nullable:true)]
+    #[Assert\Regex(
+        pattern: "/^[0-9]*$/",
+        message: 'Le nom ne doit contenir que des chiffres',
+    )]
     private $phone;
 
     #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]
@@ -52,6 +64,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatar')]
     private ?File $imageFile = null;
+
+    #[ORM\Column(type:"string", length:255, nullable:true)]
+    private ?string $avatar = null;
 
     #[ORM\Column(type:"datetime", nullable:true)]
     private ?\DateTimeInterface $updatedAt = null;
@@ -67,6 +82,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type:"boolean")]
     private $isBlocked = false;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
 
     public function __construct()
     {
@@ -360,5 +378,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
-    
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
 }
