@@ -28,11 +28,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-
     public function edit(Request $request, UserRepository $userRepository): Response
     {
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
+        }
+        // Users with ROLE_BLOCKED can't edit their profile
+        if ($this->isGranted('ROLE_BLOCKED')) {
+            return new Response('You are blocked!', 403);
         }
         $user = $this->getUser();
 

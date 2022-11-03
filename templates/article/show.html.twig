@@ -5,12 +5,14 @@
 {% block body %}
     <h1>Article</h1>
 
-    <a href="{{ path('app_article_edit', {'id': article.id}) }}">Modifier</a>
+    {% if is_granted('ROLE_USER') and article.author == app.user and not is_granted('ROLE_BLOCKED')%}
+        <a href="{{ path('app_article_edit', {'id': article.id}) }}">Modifier</a>
+    {% endif %}
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Libelle</th>
+                <th>Titre</th>
                 <td>{{ article.title }}</td>
             </tr>
             <tr>
@@ -34,7 +36,7 @@
                 <td>{{ article.negotiation ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>Opportunity</th>
+                <th>Occasion</th>
                 <td>{{ article.used ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
@@ -44,11 +46,15 @@
         </tbody>
     </table>
 
-    {# Add/remove quantity #}
-    <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'plus'}) }}">Stock +1</a>
-    <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'minus'}) }}">Stock -1</a>
-    <br>
-    <a href="{{ path('app_article_dashboard') }}">back to dashboard</a>
+    {% if is_granted('ROLE_USER') and article.author == app.user %}
+        {% if not is_granted('ROLE_BLOCKED') %}
+            {# Add/remove quantity #}
+            <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'plus'}) }}">Stock +1</a>
+            <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'minus'}) }}">Stock -1</a>
+        {% endif %}
+        <br>
+        <a href="{{ path('app_article_dashboard') }}">back to dashboard</a>
 
-    {{ include('article/_delete_form.html.twig') }}
+        {{ include('article/_delete_form.html.twig') }}
+    {% endif %}
 {% endblock %}

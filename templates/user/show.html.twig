@@ -5,8 +5,9 @@
 {% block body %}
     <h1>User</h1>
 
-    {# editing btn #}
-    <a href="{{ path('app_user_edit') }}">Modifier mon profil</a>
+    {% if not is_granted('ROLE_BLOCKED') %}
+        <a href="{{ path('app_user_edit') }}">Modifier mon profil</a>
+    {% endif %}
 
     <table class="table">
         <tbody>

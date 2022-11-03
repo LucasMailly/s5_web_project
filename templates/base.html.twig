@@ -60,6 +60,14 @@
     </nav>
 
     <body>
+        {% for type, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="flash-{{ type }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </body>
 </html>

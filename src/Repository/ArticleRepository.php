@@ -60,15 +60,15 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
 
-    public function search(string $search, int $limit, int $offset, array $params): array
+    public function search(string $search, array $params): array
     {
     $qb = $this->createQueryBuilder('a');
 
     $qb = $qb->where('a.title LIKE :search')
         ->setParameter('search', '%'.$search.'%');
 
-    if(isset($params['category'])){
-      $qb=$qb->andWhere('a.category LIKE :category')
+    if(isset($params['category'])&& $params['category'] !== 'Tout'){
+      $qb=$qb->andWhere('a.category = :category')
         ->setParameter('category', $params['category']);
     }
 
@@ -77,25 +77,30 @@ class ArticleRepository extends ServiceEntityRepository
             ->setParameter('priceMin', $params['priceMin']);
     }
 
-    $qb = $qb->orderBy('a.dateParution', 'DESC')
-    ->setMaxResults($limit)
-    ->setFirstResult($offset)
+    if (isset($params['priceMax']) && $params['priceMax'] !== '') {
+        $qb = $qb->andWhere('a.price <= :priceMax')
+            ->setParameter('priceMax', $params['priceMax']);
+    }
+
+    if(isset($params['dateParution']) && $params['dateParution'] !== ''){
+      $qb=$qb->andWhere('a.dateParution >= :dateParution')
+        ->setParameter('dateParution', $params['dateParution']);
+    }
+
+    if(isset($params['used']) && $params['used'] !== ''){
+      $qb=$qb->andWhere('a.used = :used')
+        ->setParameter('used', $params['used']);
+    }
+
+    if (array_key_exists('order-price', $params) && $params['order-price'] !== ''){
+              $qb=$qb->addOrderBy('a.price', $params['order-price']);
+    }
+
+    $qb = $qb->addOrderBy('a.dateParution', 'DESC')
     ->getQuery()
     ->getResult();
 
     return $qb;
-    }
-
-    public function countSearch(string $search): int
-    {
-        return $this->createQueryBuilder('a')
-            ->select('COUNT(a)')
-            ->where('a.title LIKE :search')
-            ->orWhere('a.category LIKE :search')
-            ->setParameter('search', '%'.$search.'%')
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
     }
 
 //    /**

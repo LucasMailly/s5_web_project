@@ -7,32 +7,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository, Request $request): Response
+    public function index(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // check if user search for something
         $search = $request->query->get('search');
         // if he does, then we get the articles that match the search
-        if ($search && $search !== '') {
-            $page = $request->query->get('page', 1);
-            if ($page < 1) {
-                $page = 1;
-            }
+        if ($search !== null) {
+            $articlesQueryResults = $articleRepository->search($search, $request->query->all());
+
             $limit = 20;
-            $offset = ($page - 1) * $limit;
-            $articles = $articleRepository->search($search, $limit, $offset, $request->query->all());
-            $total = $articleRepository->countSearch($search);
-            $nbPages = ceil($total / $limit);
+            $articles = $paginator->paginate(
+                $articlesQueryResults,
+                $request->query->getInt('page', 1),
+                $limit
+            );
 
             return $this->render('home/search.html.twig', [
                 'articles' => $articles,
-                'page' => $page,
-                'nbPages' => $nbPages,
                 'search' => $search,
-
             ]);
         }
 
