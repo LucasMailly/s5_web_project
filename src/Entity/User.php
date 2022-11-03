@@ -83,6 +83,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type:"boolean")]
     private $isBlocked = false;
 
+    #[ORM\Column]
+    private bool $isVerified = false;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -372,6 +375,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsBlocked(bool $isBlocked): self
     {
         $this->isBlocked = $isBlocked;
+
+        return $this;
+    }
+
+    public function getIsVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

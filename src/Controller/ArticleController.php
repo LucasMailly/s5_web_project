@@ -116,6 +116,7 @@ class ArticleController extends AbstractController
     #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
     public function add(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user) {
             $user->addFavoriteArticle($article);
@@ -129,6 +130,7 @@ class ArticleController extends AbstractController
     #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET'])]
     public function drop(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user) {
             $user->removeFavoriteArticle($article);

@@ -25,6 +25,7 @@ class UserCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyOnIndex(),
             BooleanField::new('isBlocked'),
+            BooleanField::new('isVerified'),
             ChoiceField::new('roles')->allowMultipleChoices()->setChoices([
                 'Admin' => 'ROLE_ADMIN',
                 'Individual' => 'ROLE_INDIVIDUAL',
