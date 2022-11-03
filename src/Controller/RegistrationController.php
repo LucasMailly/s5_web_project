@@ -18,7 +18,9 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\Smtp\Auth\LoginAuthenticator;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -76,7 +78,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register/pro', name: 'app_register_pro')]
-    public function registerPro(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function registerPro(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, UserAuthenticatorInterface $userAuthenticator, LoginFormAuthenticator $authenticator): Response
     {
         $user = new User();
         $form = $this->createForm(ProRegistrationFormType::class, $user);
@@ -96,31 +98,44 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-            
-            // generate a signed url and email it to the user
-            $signatureComponents = $this->verifyEmailHelper->generateSignature(
-                'app_verify',
-                $user->getId(),
-                $user->getEmail(),
-                ['id' => $user->getId()]
-            );
-            
-            $email = (new Email())
-                ->from('no-reply@localhost')
-                ->to($user->getEmail())
-                ->subject('Please Confirm your Email')
-                ->html("Please confirm your email by clicking on this link: <a href=\"{$signatureComponents->getSignedUrl()}\">Confirm your email</a>");
-            
-            
-            try {
-                $this->mailer->send($email);
-            } catch (TransportExceptionInterface $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
-                return $this->redirectToRoute('app_register');
-            }
 
-            $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
-            return $this->redirectToRoute('app_login');
+            // Verify mail only if ENV variable 'MAIL_CONFIRMATION' is set to enable
+            if ($this->getParameter('env.mail.confirmation') === 'enable') {
+                // generate a signed url and email it to the user
+                $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                    'app_verify',
+                    $user->getId(),
+                    $user->getEmail(),
+                    ['id' => $user->getId()]
+                );
+                
+                $email = (new Email())
+                    ->from('no-reply@localhost')
+                    ->to($user->getEmail())
+                    ->subject('Please Confirm your Email')
+                    ->html("Please confirm your email by clicking on this link: <a href=\"{$signatureComponents->getSignedUrl()}\">Confirm your email</a>");
+                
+                
+                try {
+                    $this->mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                    return $this->redirectToRoute('app_register');
+                }
+
+                $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
+                return $this->redirectToRoute('app_login');
+            } else {
+                $user->setIsVerified(true);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                );
+            }
         }
 
         return $this->render('registration/register-pro.html.twig', [
@@ -157,30 +172,43 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             
-            // generate a signed url and email it to the user
-            $signatureComponents = $this->verifyEmailHelper->generateSignature(
-                'app_verify',
-                $user->getId(),
-                $user->getEmail(),
-                ['id' => $user->getId()]
-            );
-            
-            $email = (new Email())
-                ->from('no-reply@localhost')
-                ->to($user->getEmail())
-                ->subject('Please Confirm your Email')
-                ->html("Please confirm your email by clicking on this link: <a href=\"{$signatureComponents->getSignedUrl()}\">Confirm your email</a>");
-            
-            
-            try {
-                $this->mailer->send($email);
-            } catch (TransportExceptionInterface $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
-                return $this->redirectToRoute('app_register');
-            }
+            // Verify mail only if ENV variable 'MAIL_CONFIRMATION' is set to enable
+            if ($this->getParameter('env.mail.confirmation') === 'enable') {
+                // generate a signed url and email it to the user
+                $signatureComponents = $this->verifyEmailHelper->generateSignature(
+                    'app_verify',
+                    $user->getId(),
+                    $user->getEmail(),
+                    ['id' => $user->getId()]
+                );
+                
+                $email = (new Email())
+                    ->from('no-reply@localhost')
+                    ->to($user->getEmail())
+                    ->subject('Please Confirm your Email')
+                    ->html("Please confirm your email by clicking on this link: <a href=\"{$signatureComponents->getSignedUrl()}\">Confirm your email</a>");
+                
+                
+                try {
+                    $this->mailer->send($email);
+                } catch (TransportExceptionInterface $e) {
+                    $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                    return $this->redirectToRoute('app_register');
+                }
 
-            $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
-            return $this->redirectToRoute('app_login');
+                $this->addFlash('success', 'Un email de vérification vous a été envoyé!');
+                return $this->redirectToRoute('app_login');
+            } else {
+                $user->setIsVerified(true);
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $userAuthenticator->authenticateUser(
+                    $user,
+                    $authenticator,
+                    $request
+                );
+            }
         }
 
         return $this->render('registration/register-individual.html.twig', [
