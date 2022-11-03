@@ -17,6 +17,7 @@ security:
             lazy: true
             provider: app_user_provider
             custom_authenticator: App\Security\LoginFormAuthenticator
+            user_checker: App\Security\UserChecker
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -39,7 +40,7 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/article/\d+, roles: ROLE_USER }
+        - { path: ^/article/\d+, roles: PUBLIC_ACCESS }
         - { path: ^/article/favorite, roles: ROLE_USER }
         - { path: ^/article, roles: ROLE_PRO }
     

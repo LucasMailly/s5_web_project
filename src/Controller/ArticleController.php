@@ -64,10 +64,6 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
@@ -122,6 +118,7 @@ class ArticleController extends AbstractController
     #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
     public function add(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user) {
             $user->addFavoriteArticle($article);
@@ -135,6 +132,7 @@ class ArticleController extends AbstractController
     #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET'])]
     public function drop(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
+        /** @var User $user */
         $user = $this->getUser();
         if ($user) {
             $user->removeFavoriteArticle($article);

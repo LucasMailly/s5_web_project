@@ -46,6 +46,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_ADMIN'],
                 'isBlocked' => false,
                 'avatar' => 'https://static.thenounproject.com/png/139500-200.png',
+                'isVerified' => true,
             ],
             [
                 'username' => 'user1',
@@ -55,6 +56,7 @@ class AppFixtures extends Fixture
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
                 'phone' => '0606060606',
+                'isVerified' => true,
             ],
             [
                 'username' => 'user2',
@@ -63,6 +65,7 @@ class AppFixtures extends Fixture
                 'roles' => ['ROLE_INDIVIDUAL'],
                 'isBlocked' => true,
                 'phone' => '0606060606',
+                'isVerified' => true,
             ],
             [
                 'noSiret' => '458675',
@@ -73,6 +76,7 @@ class AppFixtures extends Fixture
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/women/'.rand(0, 99).'.jpg',
                 'phone' => '0606060606',
+                'isVerified' => true,
             ],
             [
                 'noSiret' => '326895',
@@ -83,6 +87,7 @@ class AppFixtures extends Fixture
                 'isBlocked' => true,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
                 'phone' => '0606060606',
+                'isVerified' => true,
             ],
             [
                 'noSiret' => '48756',
@@ -93,6 +98,7 @@ class AppFixtures extends Fixture
                 'isBlocked' => false,
                 'avatar' => 'https://randomuser.me/api/portraits/men/'.rand(0, 99).'.jpg',
                 'phone' => '0606060606',
+                'isVerified' => true,
             ],
         ];
         //First delete old avatars
