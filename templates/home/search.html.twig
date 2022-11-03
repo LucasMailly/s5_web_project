@@ -56,16 +56,6 @@
     {% endfor %}
 
     {# pagination #}
-    <div>
-        {% if page > 1 %}
-            <a href="{{ path('app_home', {search: search, page: page - 1}) }}">Page précédente</a>
-        {% endif %}
-
-        {{ page }}
-
-        {% if page < nbPages %}
-            <a href="{{ path('app_home', {search: search, page: page + 1}) }}">Page suivante</a>
-        {% endif %}
-    </div>
+    {{ knp_pagination_render(articles) }}
 
 {% endblock %}
