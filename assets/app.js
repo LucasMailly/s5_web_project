@@ -11,5 +11,12 @@ import './styles/app.css';
 // start the Stimulus application
 import './bootstrap';
 
+// FOS JS Routing
+import Routing from 'fos-router';
+const routes = require('./js/routes.json');
+Routing.setRoutingData(routes);
+// Make Routing available globally
+window.Routing = Routing;
+
 // Compile JavaScript files
 import './js/test.js';

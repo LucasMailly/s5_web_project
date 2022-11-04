@@ -11,7 +11,7 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: 'app_home', options: ['expose' => true])]
     public function index(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator): Response
     {
         // check if user search for something
