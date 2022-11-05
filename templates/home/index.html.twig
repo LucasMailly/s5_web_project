@@ -5,8 +5,9 @@
 {% block body %}
 
     {# search bar #}
-    <form action="{{ path('app_home') }}" method="get">
+    <form id="search" action="{{ path('app_home') }}" method="get">
     <p>
+    Catégorie:
     <select name="category">
     <option value="Tout">Tout</option>
     <option value="Vetement">Vêtement</option>
@@ -21,12 +22,20 @@
     <input name="priceMin" type="text" placeholder="Prix minimum"/>
     <input name="priceMax" type="text" placeholder="Prix maximum"/>
 
+    Date de parution:
     <input type="date" name="dateParution" min="2018-01-01" max="2100-12-31">
     Occasion:
     <input type="radio" id="yes" name="used" value="1">
     <label for="yes">Oui</label>
     <input type="radio" id="no" name="used" value="0">
     <label for="no">Non</label>
+    </p>
+    <p>   
+    Prix:
+    <select name="order-price">
+        <option value="ASC">Croissant</option>
+        <option value="DESC">Décroissant</option>
+    </select>
 
     <button type="submit">Search</button>
     </p>
@@ -38,7 +47,7 @@
             <div >
                 <a href="{{ path('app_article_show', {'id': article.id}) }}">
                     <div>
-                        <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
                         <h5 >{{ article.title }}</h5>
                         <h5>{{ article.price }} €</h5>
                     </div>
@@ -55,7 +64,7 @@
             <div >
                 <a href="{{ path('app_article_show', {'id': article.id}) }}">
                     <div>
-                        <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
                         <h5 >{{ article.title }}</h5>
                         <h5>{{ article.price }} €</h5>
                     </div>

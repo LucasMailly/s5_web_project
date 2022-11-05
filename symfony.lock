@@ -57,6 +57,21 @@
             "ref": "b131e6cbfe1b898a508987851963fff485986285"
         }
     },
+    "friendsofsymfony/jsrouting-bundle": {
+        "version": "3.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "2.3",
+            "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
+        },
+        "files": [
+            "config/routes/fos_js_routing.yaml"
+        ]
+    },
+    "knplabs/knp-paginator-bundle": {
+        "version": "v6.0.0"
+    },
     "phpunit/phpunit": {
         "version": "9.5",
         "recipe": {
@@ -305,6 +320,25 @@
         },
         "files": [
             "config/packages/messenger.yaml"
+        ]
+    },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.16",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "1.10",
+            "ref": "5878c7c28468ca0fdce2497a04cfc66bab0dc3ef"
+        },
+        "files": [
+            "assets/app.js",
+            "assets/bootstrap.js",
+            "assets/controllers.json",
+            "assets/controllers/hello_controller.js",
+            "assets/styles/app.css",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
         ]
     },
     "symfonycasts/verify-email-bundle": {

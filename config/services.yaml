@@ -4,8 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    app.path.user_avatars: /uploads/images/avatars
-    app.path.article_images: /uploads/images/articles
+    app.path.user_avatars: /uploads/images/avatars/
+    app.path.article_images: /uploads/images/articles/
     env.mail.confirmation: '%env(MAIL_CONFIRMATION)%'
     
 services:
