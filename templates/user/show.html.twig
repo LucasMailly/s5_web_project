@@ -13,7 +13,7 @@
         <tbody>
             <tr>
                 <th>Avatar</th>
-                <td><img src="{{ asset(avatars_path ~ '/' ~ (user.avatar ? user.avatar : 'default.png')) }}" alt="User avatar" width="150px" height="150px"></td>
+                <td><img src="{{ asset(avatars_path ~ (user.avatar ? user.avatar : 'default.png')) }}" alt="User avatar" width="150px" height="150px"></td>
             </tr>
             <tr>
                 <th>Email</th>
