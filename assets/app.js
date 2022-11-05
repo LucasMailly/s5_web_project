@@ -17,6 +17,3 @@ const routes = require('./js/routes.json');
 Routing.setRoutingData(routes);
 // Make Routing available globally
 window.Routing = Routing;
-
-// Compile JavaScript files
-import './js/test.js';
