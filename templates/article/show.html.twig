@@ -46,6 +46,28 @@
         </tbody>
     </table>
 
+    {# Seller informations #}
+    <h2>Informations du vendeur</h2>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td><img src="{{ asset(avatars_path ~ '/' ~ (article.author.avatar ? article.author.avatar : 'default.jpg')) }}" alt="avatar" width="100" height="100"></td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ article.author.name }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ article.author.email }}</td>
+            </tr>
+            <tr>
+                <th>Téléphone</th>
+                <td>{{ article.author.phone }}</td>
+            </tr>
+        </tbody>
+
+
     {% if is_granted('ROLE_USER') and article.author == app.user %}
         {% if not is_granted('ROLE_BLOCKED') %}
             {# Add/remove quantity #}
