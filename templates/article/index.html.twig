@@ -12,7 +12,7 @@
     {% for article in articles %}
         <a href="{{ path('app_article_show', {'id': article.id}) }}">
             <div>
-                <img src="{{ asset(article_images_path ~ '/' ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
                 <h5>{{ article.title }}</h5>
                 <h5>{{ article.price }} €</h5>
                 <h5>Stock: {{article.quantity}}</h5>
