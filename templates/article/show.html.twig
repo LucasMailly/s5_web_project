@@ -50,6 +50,14 @@
                     {% endfor %}
                 </td>
             </tr>
+            <tr>
+                <th>
+                <a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}"> ♥ Favoris</a>
+                </th>
+                <th>
+                <a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}"> ♡ Retirer </a>
+                </th>
+            </tr>
         </tbody>
     </table>
 
