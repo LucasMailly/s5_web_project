@@ -18,4 +18,24 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+/migrations/
 .idea/*
+
+/migrations/
+/public/uploads/*
+!/public/uploads/images
+/public/uploads/images/*
+!/public/uploads/images/avatars
+!/public/uploads/images/articles
+/public/uploads/images/avatars/*
+/public/uploads/images/articles/*
+!/public/uploads/images/avatars/default.png
+!/public/uploads/images/articles/default.png
+!/public/uploads/images/avatars/default.jpg
+!/public/uploads/images/articles/default.jpg
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###

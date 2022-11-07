@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>User</h1>
+
+    {% if not is_granted('ROLE_BLOCKED') %}
+        <a href="{{ path('app_user_edit') }}">Modifier mon profil</a>
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Avatar</th>
+                <td><img src="{{ asset(avatars_path ~ (user.avatar ? user.avatar : 'default.png')) }}" alt="User avatar" width="150px" height="150px"></td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            {% if user.username %}
+                <tr>
+                    <th>Pseudo</th>
+                    <td>{{ user.username }}</td>
+                </tr>
+            {% endif %}
+            <tr>
+                <th>Phone</th>
+                <td>{{ user.phone ? user.phone : 'Non renseigné' }}</td>
+            </tr>
+            {% if user.name and user.noSIRET %}
+                <tr>
+                    <th>Name</th>
+                    <td>{{ user.name }}</td>
+                </tr>
+                <tr>
+                    <th>NoSIRET</th>
+                    <td>{{ user.noSIRET }}</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}

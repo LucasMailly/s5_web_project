@@ -1,5 +1,8 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    globals:
+        avatars_path: '%app.path.user_avatars%'
+        article_images_path: '%app.path.article_images%'
 
 when@test:
     twig:

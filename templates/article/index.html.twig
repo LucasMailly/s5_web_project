@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+
+{% block body %}
+    <h1>Mes Articles</h1>
+
+    {% if not is_granted('ROLE_BLOCKED') %}
+        <a href="{{ path('app_article_new') }}">Ajouter un article</a>
+    {% endif %}
+
+    {% for article in articles %}
+        <a href="{{ path('app_article_show', {'id': article.id}) }}">
+            <div>
+                <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
+                <h5>{{ article.title }}</h5>
+                <h5>{{ article.price }} €</h5>
+                <h5>Stock: {{article.quantity}}</h5>
+            </div>
+        </a>
+    {% else %}
+        <p>no records found</p>
+    {% endfor %}
+{% endblock %}

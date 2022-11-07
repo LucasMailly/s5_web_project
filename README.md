@@ -2,7 +2,7 @@
 # Web Project S5
 L3 Informatique (2022-2023)
 
-**Version Symfony:** 5.4
+**Version Symfony:** 6.1
 
 
 ## Authors
