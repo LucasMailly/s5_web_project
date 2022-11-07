@@ -18,54 +18,46 @@
 
     <nav>
         {% block nav %}
-            <a href="{{ path('app_home') }}">Nom</a>
-            <div>
-                <ul>
-                    {% if app.user %}
+        <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="{{ path('app_home') }}">ReShop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                  {% if app.user %}
                         {% if 'ROLE_PRO' in app.user.roles %}
-                            <li>
-                                <a href="{{ path('app_article_dashboard') }}">Mes articles</a>
-                            </li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('app_article_dashboard') }}">Mes articles</a></li>
                         {% endif %}
-                    {% endif %}
-
-                    {% if app.user %}
+                  {% endif %}
+                  {% if app.user %}
                         {% if 'ROLE_INDIVIDUAL' in app.user.roles %}
-                            <li>
-                                <a href="{{ path('app_article_favorite_dashboard') }}">Mes articles Favoris</a>
-                            </li>
+                            <li class="nav-item"><a class="nav-link" href="{{ path('app_article_favorite_dashboard') }}">Mes articles Favoris</a></li>
                         {% endif %}
                     {% endif %}
 
                     {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-                        <li>
-                            <a href="{{ path('app_admin') }}">Dashboard</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_admin') }}">Dashboard</a></li>
                     {% else %}
-                        <li>
-                            <a href="{{ path('app_contact') }}">Contact</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_contact') }}">Contact</a></li>
                     {% endif %}
 
                     {% if app.user %}
-                        <li>
-                            <a href="{{ path('app_logout') }}">Déconnexion</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('app_user_index') }}">
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_user_index') }}">
                                 <img src="{{ avatars_path ~ (app.user.avatar ? app.user.avatar : "default.png") }}" alt="Avatar" width="50px" height="50px">
                             </a>
                         </li>
                     {% else %}
-                        <li>
-                            <a href="{{ path('app_login') }}">Connexion</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('app_register') }}">Inscription</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
                     {% endif %}
+
                 </ul>
             </div>
+        </div>
+    </nav>
         {% endblock %}
     </nav>
 
