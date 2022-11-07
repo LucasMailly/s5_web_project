@@ -54,74 +54,78 @@
         </div>
       </header>
 
-    {% if mostRecentArticles is not null %}
-        <h1>Articles populaires</h1>
+      {% if mostRecentArticles is not null %}
+      <h1>Articles populaires</h1>
 
-        <section class="py-5">
-        {% for article in mostFavoriteArticles %}
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">{{ article.title }}</h5>
-                                <!-- Product price-->
-                                <h5>{{ article.price }} €
-                                    <a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}"> ♥ Favoris</a>
-                                    <a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}"> ♡ Retirer </a>
-                                </h5>
-                            </div>
-                        </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="="{{ path('app_article_show', {'id': article.id}) }}"">Voir l'article</a></div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </div>
-            </section>
-        {% else %}
-            <p>Aucun article trouvé</p>
-        {% endfor %}
-    {% endif %}
+      <div class="py-5">
+          <div class="container mt-5">
+              <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
+                  {% for article in mostRecentArticles %}
+                      <div class="col mb-5">
+                          <div class="card h-100">
+                              <!-- Product image-->
+                              <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
+                              <!-- Product details-->
+                              <div class="card-body p-4">
+                                  <div class="text-center">
+                                      <!-- Product name-->
+                                      <h5 class="fw-bolder">{{ article.title }}</h5>
+                                      <!-- Product price-->
+                                      <h5>{{ article.price }} €
+                                          <a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}"> ♥ Favoris</a>
+                                          <a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}"> ♡ Retirer </a>
+                                      </h5>
+                                  </div>
+                              </div>
+                              <!-- Product actions-->
+                              <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                              <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="="{{ path('app_article_show', {'id': article.id}) }}"">Voir l'article</a></div>
+                              </div>
+                          </div>
+                      </div>
+                  {% else %}
+                      <p>Aucun article trouvé</p>
+                  {% endfor %}
+              </div>
+          </div>
+      </div>
+  {% endif %}
 
-    {% if mostFavoriteArticles is not null %}
-        <h1>Nouveautés</h1>
-        {% for article in mostRecentArticles %}
-        <section class="py-5">
-        <div class="container px-4 px-lg-5 mt-5">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5">
-                    <div class="card h-100">
-                        <!-- Product image-->
-                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
-                        <!-- Product details-->
-                        <div class="card-body p-4">
-                            <div class="text-center">
-                                <!-- Product name-->
-                                <h5 class="fw-bolder">{{ article.title }}</h5>
-                                <!-- Product price-->
-                                <h5>{{ article.price }} €</h5>
-                            </div>
-                        </div>
-                        <!-- Product actions-->
-                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="="{{ path('app_article_show', {'id': article.id}) }}"">Voir l'article</a></div>
-                        </div>
-                    </div>
-                </div>
-                </div>
-                </div>
-            </section>
-        {% else %}
-            <p>Aucun article trouvé</p>
-        {% endfor %}
-    {% endif %}
+  {% if mostFavoriteArticles is not null %}
+  <h1>Nouveautés</h1>
+
+  <div class="py-5">
+      <div class="container mt-5">
+          <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
+              {% for article in mostFavoriteArticles %}
+                  <div class="col mb-5">
+                      <div class="card h-100">
+                          <!-- Product image-->
+                          <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
+                          <!-- Product details-->
+                          <div class="card-body p-4">
+                              <div class="text-center">
+                                  <!-- Product name-->
+                                  <h5 class="fw-bolder">{{ article.title }}</h5>
+                                  <!-- Product price-->
+                                  <h5>{{ article.price }} €
+                                      <a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}"> ♥ Favoris</a>
+                                      <a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}"> ♡ Retirer </a>
+                                  </h5>
+                              </div>
+                          </div>
+                          <!-- Product actions-->
+                          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                          <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="="{{ path('app_article_show', {'id': article.id}) }}"">Voir l'article</a></div>
+                          </div>
+                      </div>
+                  </div>
+              {% else %}
+                  <p>Aucun article trouvé</p>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+{% endif %}
 
 {% endblock %}
