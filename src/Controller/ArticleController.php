@@ -115,17 +115,6 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 
-    //Article Favorite dashboard
-    #[Route('/', name: 'app_article_favorite_dashboard', methods: ['GET'])]
-    public function IndexFavoriteArticle(ArticleRepository $articleRepository): Response
-    {
-        $user = $this->favoriteUsers();
-
-        return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findBy(['author' => $user]),
-        ]);
-    }
-
     #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
     public function add(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
     {
