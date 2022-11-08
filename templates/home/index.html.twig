@@ -25,6 +25,16 @@
                 <option value="Mobilier">Mobilier</option>
                 </select>
 
+    {# search bar #}
+    <form action="{{ path('app_home') }}" method="get">
+    <p>
+    Catégorie:
+    <select name="category">
+        <option value="Tout">Tout</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+        {% endfor %}
+    </select>
                 <input type="text" name="search" placeholder="Rechercher" value="{{ search ?? '' }}">
 
                 <input name="priceMin" type="text" placeholder="Prix minimum"/>
