@@ -1,80 +1,107 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block head %}
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+	<meta name="description" content=""/>
+	<meta name="author" content=""/>
+	{% block title %}Home
+	{% endblock %}
 
+{% endblock %}
 {% block body %}
+	{% include 'home/_search-bar.html.twig' %}
 
-    {# search bar #}
-    <form id="search" action="{{ path('app_home') }}" method="get">
-    <p>
-    Catégorie:
-    <select name="category">
-    <option value="Tout">Tout</option>
-    <option value="Vetement">Vêtement</option>
-    <option value="Voiture">Voiture</option>
-    <option value="Jardinage">Jardinage</option>
-    <option value="Materiaux">Matériaux</option>
-    <option value="Mobilier">Mobilier</option>
-    </select>
+	{% if mostRecentArticles is not null %}
+		<h1 class="mt-3 mx-5">Articles populaires</h1>
 
-    <input type="text" name="search" placeholder="Rechercher" value="{{ search ?? '' }}">
+		<div class="py-5">
+			<div class="container mt-5">
+				<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
+					{% for article in mostRecentArticles %}
+						<div class="col mb-5">
+							<div
+								class="card h-100">
+								<!-- Product image-->
+								<img
+								src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
+								<!-- Product details-->
+								<div class="card-body p-4">
+									<div
+										class="text-center">
+										<!-- Product name-->
+										<h5 class="fw-bolder">{{ article.title }}</h5>
+										<!-- Product price-->
+										<h5>{{ article.price }}
+											€
+											<a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}">
+												♥ Favoris</a>
+											<a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}">
+												♡ Retirer
+											</a>
+										</h5>
+									</div>
+								</div>
+								<!-- Product actions-->
+								<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+									<div class="text-center">
+										<a class="btn btn-outline-dark mt-auto" href="{{ path('app_article_show', {'id': article.id}) }}">Voir l'article</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<p>Aucun article trouvé</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	{% endif %}
 
-    <input name="priceMin" type="text" placeholder="Prix minimum"/>
-    <input name="priceMax" type="text" placeholder="Prix maximum"/>
+	{% if mostFavoriteArticles is not null %}
+		<h1 class="mt-3 mx-5">Nouveautés</h1>
 
-    Date de parution:
-    <input type="date" name="dateParution" min="2018-01-01" max="2100-12-31">
-    Occasion:
-    <input type="radio" id="yes" name="used" value="1">
-    <label for="yes">Oui</label>
-    <input type="radio" id="no" name="used" value="0">
-    <label for="no">Non</label>
-    </p>
-    <p>   
-    Prix:
-    <select name="order-price">
-        <option value="ASC">Croissant</option>
-        <option value="DESC">Décroissant</option>
-    </select>
-
-    <button type="submit">Search</button>
-    </p>
-    </form>
-
-    {% if mostRecentArticles is not null %}
-        <h1>Articles populaires</h1>
-        {% for article in mostFavoriteArticles %}
-            <div >
-                <a href="{{ path('app_article_show', {'id': article.id}) }}">
-                    <div>
-                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-                        <h5 >{{ article.title }}</h5>
-                        <h5>{{ article.price }} €
-                            <a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}"> ♥ Favoris</a>
-                            <a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}"> ♡ Retirer </a>
-                        </h5>
-                    </div>
-                </a>
-            </div>
-        {% else %}
-            <p>Aucun article trouvé</p>
-        {% endfor %}
-    {% endif %}
-
-    {% if mostFavoriteArticles is not null %}
-        <h1>Nouveautés</h1>
-        {% for article in mostRecentArticles %}
-            <div >
-                <a href="{{ path('app_article_show', {'id': article.id}) }}">
-                    <div>
-                        <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" width="100px" height="100px">
-                        <h5 >{{ article.title }}</h5>
-                        <h5>{{ article.price }} €</h5>
-                    </div>
-                </a>
-        {% else %}
-            <p>Aucun article trouvé</p>
-        {% endfor %}
-    {% endif %}
+		<div class="py-5">
+			<div class="container mt-5">
+				<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
+					{% for article in mostFavoriteArticles %}
+						<div class="col mb-5">
+							<div
+								class="card h-100">
+								<!-- Product image-->
+								<img
+								src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
+								<!-- Product details-->
+								<div class="card-body p-4">
+									<div
+										class="text-center">
+										<!-- Product name-->
+										<h5 class="fw-bolder">{{ article.title }}</h5>
+										<!-- Product price-->
+										<h5>{{ article.price }}
+											€
+											<a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}">
+												♥ Favoris</a>
+											<a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}">
+												♡ Retirer
+											</a>
+										</h5>
+									</div>
+								</div>
+								<!-- Product actions-->
+								<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+									<div class="text-center">
+										<a class="btn btn-outline-dark mt-auto" href="{{ path('app_article_show', {'id': article.id}) }}">Voir l'article</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% else %}
+						<p>Aucun article trouvé</p>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	{% endif %}
 
 {% endblock %}

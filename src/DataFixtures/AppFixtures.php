@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use App\Entity\Homepage;
 use App\Entity\User;
 use App\Repository\ArticleRepository;
@@ -135,27 +136,41 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
 
+        //Add Categories
+        $categories = [
+            ["Vêtement", null],
+            ["Voiture", null],
+            ["Jardinage", null],
+            ["Mobilier", null],
+        ];
+
+        for ($i = 0; $i < count($categories); $i++) {
+            $category = new Category();
+            $category->setName($categories[$i][0]);
+            $manager->persist($category);
+            $categories[$i][1] = $category;
+        }
 
         //Add articles
         $articles = [
-            ['Vêtement','Pantalon cargo','jpeg', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F59e39263-711c-443d-aec8-e358620e3dd7%2Fp1.jpeg?table=block&id=c8fb9aab-85e9-4db1-9c02-8f5ce50bcf57&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],   
-            ['Vêtement','Robe','png', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F58990fa0-e835-4976-b6fb-91684236cc5f%2FUntitled.png?table=block&id=9557aec7-d717-42c6-ba01-6f7fe31fa05c&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
-            ['Vêtement','Pantalon','jpeg', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6ca6bcde-0c6c-43ab-8011-3097a7e0ec43%2Fp2.jpeg?table=block&id=4bc44524-bcb4-4150-8346-73d5210efdac&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=370&userId=&cache=v2'],
-            ['Vêtement','Veste jaune','png', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0bb438a9-b2e9-4c2c-806d-16d6547a43e6%2FUntitled.png?table=block&id=dea30251-1d88-4937-8211-dc5652c53b11&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=1400&userId=&cache=v2'],
-            ['Vêtement','T-shirt jaune','jpeg', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F39a7cd51-8a0f-4d07-9f70-462f0cd45e04%2Ft1.jpeg?table=block&id=e70ba314-2d4b-4791-b1be-fa71573db269&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=400&userId=&cache=v2'],
-            ['Vêtement','Jean','png', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd1d871b3-7ea3-4ad7-9203-e3c2c966e1f4%2FUntitled.png?table=block&id=501d908a-c92e-4486-a343-c5f97b5e8ab3&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=720&userId=&cache=v2'],
-            ['Vêtement','T-shirt noir','jpeg', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F02eb68d3-38c3-4bba-8068-cdaf5b469f77%2Ft2.jpeg?table=block&id=26a44099-3a06-48bc-bafe-d9856a3f5acb&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
-            ['Vêtement','T-shirt rouge','jpeg', 'https://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6d6ab22a-3bba-4463-beae-6b511847399f%2Ft3.jpeg?table=block&id=877a3ad1-3ba9-4a6b-90eb-c775501d6cec&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
-            ['Voiture', 'Peugeot Jaune', 'jpg', 'https://www.auto-moto.com/wp-content/uploads/sites/9/2022/02/01-peugeot-208-750x410.jpg'],
-            ['Voiture', 'Renault Orange', 'jpg', 'https://www.challenges.fr/assets/img/2021/10/14/cover-r4x3w1000-61b78a7828736-27157-1601439-k2-k1-3696041-jpg.jpg'],
-            ['Voiture', 'Audi Noir', 'jpg', 'https://static.cnews.fr/sites/default/files/styles/image_750_422/public/audi_62ea632803c1e.jpg?itok=w5M6aSss'],
-            ['Voiture', 'Citroën', 'webp', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59yvMSQz3e3HzUsiVY2NR_ZStZgEX8OKFDA&usqp=CAU'],
-            ['Jardinage', 'Kit 3 outils à fleurs', 'jpg', 'https://images.truffaut.com/media/catalog/productcdn:///Articles/jpg/0567000/567019_001.jpg?width=700&height=700&store=fr&image-type=image'],
-            ['Jardinage', 'Outils Jardinage Manche En Bois', 'webp', 'https://sc02.alicdn.com/kf/Hf259742da91e46e48d9c2f78ab6988bas/239720024/Hf259742da91e46e48d9c2f78ab6988bas.jpg_.webp'],
-            ['Jardinage', 'Beche avec manche et Protection pied Jad jardin', 'jpg', 'https://www.provence-outillage.fr/data/images/beche-a-00163.800.jpg'],
-            ['Mobilier', 'Table de repas extensible EDEN', 'jpg', 'https://www.mobilierdefrance.com/23874/table-de-repas-extensible-eden.jpg'],
-            ['Mobilier', 'Fauteuil Scandinave en Tissu Gris', 'jpg', 'https://www.mobilier-deco.com/img/produit/thumbs/jenna-fauteuil-scandinave-en-tissu-gris-jenna-1.jpg'],
-            ['Mobilier', 'Canapé scandinave d\'angle réversible convertible - Gris', 'jpg', 'https://bestmobilier.com/6954-home_default/nordic-canape-scandinave-d-angle-reversible-convertible-gris-clair.jpg'],
+            [$categories[0][1], 'Pantalon cargo','jpeg', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F59e39263-711c-443d-aec8-e358620e3dd7%2Fp1.jpeg?table=block&id=c8fb9aab-85e9-4db1-9c02-8f5ce50bcf57&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],   
+            [$categories[0][1], 'Robe','png', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F58990fa0-e835-4976-b6fb-91684236cc5f%2FUntitled.png?table=block&id=9557aec7-d717-42c6-ba01-6f7fe31fa05c&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
+            [$categories[0][1], 'Pantalon','jpeg', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6ca6bcde-0c6c-43ab-8011-3097a7e0ec43%2Fp2.jpeg?table=block&id=4bc44524-bcb4-4150-8346-73d5210efdac&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=370&userId=&cache=v2'],
+            [$categories[0][1], 'Veste jaune','png', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F0bb438a9-b2e9-4c2c-806d-16d6547a43e6%2FUntitled.png?table=block&id=dea30251-1d88-4937-8211-dc5652c53b11&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=1400&userId=&cache=v2'],
+            [$categories[0][1], 'T-shirt jaune','jpeg', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F39a7cd51-8a0f-4d07-9f70-462f0cd45e04%2Ft1.jpeg?table=block&id=e70ba314-2d4b-4791-b1be-fa71573db269&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=400&userId=&cache=v2'],
+            [$categories[0][1], 'Jean','png', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fd1d871b3-7ea3-4ad7-9203-e3c2c966e1f4%2FUntitled.png?table=block&id=501d908a-c92e-4486-a343-c5f97b5e8ab3&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=720&userId=&cache=v2'],
+            [$categories[0][1], 'T-shirt noir','jpeg', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F02eb68d3-38c3-4bba-8068-cdaf5b469f77%2Ft2.jpeg?table=block&id=26a44099-3a06-48bc-bafe-d9856a3f5acb&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
+            [$categories[0][1], 'T-shirt rouge','jpeg', 'http://rowan-comfort-e0c.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F6d6ab22a-3bba-4463-beae-6b511847399f%2Ft3.jpeg?table=block&id=877a3ad1-3ba9-4a6b-90eb-c775501d6cec&spaceId=ab3e3a4d-9b9b-467c-819b-cfd55fc07fe0&width=450&userId=&cache=v2'],
+            [$categories[1][1], 'Peugeot Jaune', 'jpg', 'https://www.auto-moto.com/wp-content/uploads/sites/9/2022/02/01-peugeot-208-750x410.jpg'],
+            [$categories[1][1], 'Renault Orange', 'jpg', 'https://www.challenges.fr/assets/img/2021/10/14/cover-r4x3w1000-61b78a7828736-27157-1601439-k2-k1-3696041-jpg.jpg'],
+            [$categories[1][1], 'Audi Noir', 'jpg', 'https://static.cnews.fr/sites/default/files/styles/image_750_422/public/audi_62ea632803c1e.jpg?itok=w5M6aSss'],
+            [$categories[1][1], 'Citroën', 'webp', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT59yvMSQz3e3HzUsiVY2NR_ZStZgEX8OKFDA&usqp=CAU'],
+            [$categories[2][1], 'Kit 3 outils à fleurs', 'jpg', 'https://images.truffaut.com/media/catalog/productcdn:///Articles/jpg/0567000/567019_001.jpg?width=700&height=700&store=fr&image-type=image'],
+            [$categories[2][1], 'Outils Jardinage Manche En Bois', 'webp', 'https://sc02.alicdn.com/kf/Hf259742da91e46e48d9c2f78ab6988bas/239720024/Hf259742da91e46e48d9c2f78ab6988bas.jpg_.webp'],
+            [$categories[2][1], 'Beche avec manche et Protection pied Jad jardin', 'jpg', 'https://www.provence-outillage.fr/data/images/beche-a-00163.800.jpg'],
+            [$categories[3][1], 'Table de repas extensible EDEN', 'jpg', 'https://www.mobilierdefrance.com/23874/table-de-repas-extensible-eden.jpg'],
+            [$categories[3][1], 'Fauteuil Scandinave en Tissu Gris', 'jpg', 'https://www.mobilier-deco.com/img/produit/thumbs/jenna-fauteuil-scandinave-en-tissu-gris-jenna-1.jpg'],
+            [$categories[3][1], 'Canapé scandinave d\'angle réversible convertible - Gris', 'jpg', 'https://bestmobilier.com/6954-home_default/nordic-canape-scandinave-d-angle-reversible-convertible-gris-clair.jpg'],
         ];
         //First delete old article images except default images
         $images_directory = 'public/uploads/images/articles/';

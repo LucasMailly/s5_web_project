@@ -24,15 +24,11 @@ class Article
     #[ORM\Column(type: 'string', length: 255)]
     private $title;
 
-
     #[ORM\Column(type: 'float')]
     private $price;
 
     #[ORM\Column(type: 'date')]
     private $dateParution;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $category;
 
     #[ORM\Column(type: 'boolean')]
     private $negotiation;
@@ -44,7 +40,6 @@ class Article
     #[Assert\PositiveOrZero]
     #[ORM\Column(type: 'integer')]
     private $quantity;
-
 
     #[Vich\UploadableField(mapping: 'article_images', fileNameProperty: 'imgArticle')]
     private ?File $imageFile = null;
@@ -61,6 +56,10 @@ class Article
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favoriteArticles')]
     private $favoriteUsers;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function __construct()
     {
@@ -155,17 +154,7 @@ class Article
         return $this;
     }
 
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
 
-    public function setCategory(?string $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
     public function isNegotiation(): ?bool
     {
@@ -238,5 +227,19 @@ class Article
 
         return $this;
     }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+
 
 }
