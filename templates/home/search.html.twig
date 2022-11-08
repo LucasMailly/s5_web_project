@@ -9,7 +9,7 @@
         <p>
         Catégorie:
         <select name="category">
-            //option in function of category
+            <option value="Tout">Tout</option>
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}

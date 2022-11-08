@@ -68,9 +68,9 @@ class ArticleRepository extends ServiceEntityRepository
         ->InnerJoin('a.category', 'c')
         ->setParameter('search', '%'.$search.'%');
 
-    if(isset($params['c.name ']) && $params['category'] !== 'Tout'){
-        $qb = $qb->andWhere('c.name = :category')
-            ->setParameter('category', $params['c.name ']);
+    if(isset($params['category']) && $params['category'] !== 'Tout'){
+        $qb = $qb->andWhere('c.id = :category')
+            ->setParameter('category', $params['category']);
     }
 
     if (isset($params['priceMin']) && $params['priceMin'] !== '') {
