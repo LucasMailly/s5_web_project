@@ -1,75 +1,98 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+	<head>
+		<meta charset="UTF-8">
+		<title>
+			{% block title %}Reshop
+			{% endblock %}
+		</title>
+		<link
+		rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+		{# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-        <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
-        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-    </head>
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+		<script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+		<script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+	</head>
 
-    <nav>
-        {% block nav %}
-        <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="{{ path('app_home') }}">ReShop</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                  {% if app.user %}
-                        {% if 'ROLE_PRO' in app.user.roles %}
-                    <li class="nav-item"><a class="nav-link" href="{{ path('app_article_dashboard') }}">Mes articles</a></li>
-                        {% endif %}
-                  {% endif %}
-                  {% if app.user %}
-                        {% if 'ROLE_INDIVIDUAL' in app.user.roles %}
-                            <li class="nav-item"><a class="nav-link" href="{{ path('app_article_favorite_dashboard') }}">Mes articles Favoris</a></li>
-                        {% endif %}
-                    {% endif %}
+	<!-- Navigation-->
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container px-4 px-lg-5">
+			<a class="navbar-brand" href="{{ path('app_home') }}">ReShop</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+					{% if app.user %}
+						{% if 'ROLE_PRO' in app.user.roles %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('app_article_dashboard') }}">Mes articles</a>
+							</li>
+						{% endif %}
+					{% endif %}
+					{% if app.user %}
+						{% if 'ROLE_INDIVIDUAL' in app.user.roles %}
+							<li class="nav-item">
+								<a class="nav-link" href="{{ path('app_article_favorite_dashboard') }}">Mes articles Favoris</a>
+							</li>
+						{% endif %}
+					{% endif %}
 
-                    {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_admin') }}">Dashboard</a></li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_contact') }}">Contact</a></li>
-                    {% endif %}
+					{% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_admin') }}">Dashboard</a>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_contact') }}">Contact</a>
+						</li>
+					{% endif %}
 
-                    {% if app.user %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a></li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_user_index') }}">
-                                <img src="{{ avatars_path ~ (app.user.avatar ? app.user.avatar : "default.png") }}" alt="Avatar" width="50px" height="50px">
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Connexion</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ path('app_register') }}">Inscription</a></li>
-                    {% endif %}
+					{% if app.user %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_user_index') }}">
+								<img src="{{ avatars_path ~ (app.user.avatar ? app.user.avatar : "default.png") }}" alt="Avatar" width="50px" height="50px">
+							</a>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_register') }}">Inscription</a>
+						</li>
+					{% endif %}
 
-                </ul>
-            </div>
-        </div>
-    </nav>
-        {% endblock %}
-    </nav>
+				</ul>
+			</div>
+		</div>
+	</nav>
 
-    <body>
-        {% for type, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="flash-{{ type }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
+	<body>
+		{% for type, messages in app.flashes %}
+			{% for message in messages %}
+				<div class="flash-{{ type }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
 
-        {% block body %}{% endblock %}
-    </body>
+		{% block body %}{% endblock %}
+	</body>
+
+	<!-- Footer-->
+	<footer class="py-3 bg-dark">
+		<div class="container px-4 px-lg-5">
+			<div class="small text-center text-muted">© Reshop {{ "now"|date("Y") }}</div> 
+		</div>
+	</footer>
 </html>
