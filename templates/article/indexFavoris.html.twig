@@ -30,6 +30,9 @@
               <h5>{{ article.price }}
                 €</h5>
             <h5>Stock: {{article.quantity}}</h5>
+						<a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}">
+							♡ Retirer
+						</a>
             </div>
             </div>
             <!-- Product actions-->
