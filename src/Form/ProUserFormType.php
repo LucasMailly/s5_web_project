@@ -32,7 +32,8 @@ class ProUserFormType extends AbstractType
                 'label' => 'Numéro SIRET',
 
             ])
-            ->add('imageFile',VichImageType::class,['label' => 'photo de profil','required' => false])
+            ->add('imageFile',VichImageType::class,['required' => false, 'download_label' => false, 'download_uri' => false,'check'
+                'image_uri' => false, 'delete_label'=> 'Supprimer l\'image ? ','label'=> false])
         ;
     }
 
