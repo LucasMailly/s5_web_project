@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\IndividualUserFormType;
 use App\Form\ProUserFormType;
+use App\Repository\ArticleRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -88,5 +89,19 @@ class UserController extends AbstractController
         }
 
         return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+    }
+
+    //Article Favorite dashboard
+    #[Route('/favorite', name: 'app_article_favorite_dashboard', methods: ['GET'])]
+    public function IndexFavoriteArticle(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        $user = $this->getUser();
+
+        return $this->render('article/indexFavoris.html.twig', [
+            'articleFavoris' => $user->getFavoriteArticles(),
+        ]);
     }
 }
