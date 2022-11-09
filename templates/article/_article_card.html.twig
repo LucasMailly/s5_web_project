@@ -5,7 +5,20 @@
 		<img
 		src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
 		<!-- Product details-->
-		<div class="card-body p-4">
+		<div
+			class="card-body p-4">
+			{% if app.user and is_granted('ROLE_INDIVIDUAL')%}
+				<!-- like button -->
+				{% if app.user in article.favoriteUsers %}
+					<a href="{{ path('app_article_drop', {'id': article.id}) }}" class="btn btn-danger btn-circle btn-circle-sm position-absolute top-0 end-0 mt-2 me-2">
+						<i class="fa-solid fa-heart"></i>
+					</a>
+				{% else %}
+					<a href="{{ path('app_article_add', {'id': article.id}) }}" class="btn btn-outline-danger btn-circle btn-circle-sm position-absolute top-0 end-0 mt-2 me-2">
+						<i class="fa-regular fa-heart"></i>
+					</a>
+				{% endif %}
+			{% endif %}
 			<div
 				class="text-center">
 				<!-- Product name-->
@@ -13,11 +26,6 @@
 				<!-- Product price-->
 				<h5>{{ article.price }}
 					€
-					<a href="{{ path('app_article_add', {'id': article.id, 'add': 'ajouterFavoris'}) }}">
-						♥ Favoris</a>
-					<a href="{{ path('app_article_drop', {'id': article.id, 'drop': 'retirerFavoris'}) }}">
-						♡ Retirer
-					</a>
 				</h5>
 			</div>
 		</div>
