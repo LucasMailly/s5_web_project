@@ -6,41 +6,87 @@
     <h1>User</h1>
 
     {% if not is_granted('ROLE_BLOCKED') %}
-        <a href="{{ path('app_user_edit') }}">Modifier mon profil</a>
+        <div class="container-lg px-2 mt-4">
+            <a class="btn btn-primary btn-lg px-4" href="{{ path('app_user_edit') }}">Modifier mon profil</a>
+        </div>
+        <div class="container-xl px-4 mt-4">
     {% endif %}
+    <div class="row">
+        <div class="col-xl-4">
+            <!-- Profile picture card-->
+            <div class="card mb-4 mb-xl-0">
+                <div class="card-header">Photo de profil</div>
+                <div class="card-body text-center">
+                    <!-- Profile picture image-->
+                    <img class="img-account-profile rounded-circle mb-2" src="{{ asset(avatars_path ~ (user.avatar ? user.avatar : 'default.png')) }}" alt="User avatar" width="150px" height="150px">
+                </div>
+            </div>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Avatar</th>
-                <td><img src="{{ asset(avatars_path ~ (user.avatar ? user.avatar : 'default.png')) }}" alt="User avatar" width="150px" height="150px"></td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            {% if user.username %}
-                <tr>
-                    <th>Pseudo</th>
-                    <td>{{ user.username }}</td>
-                </tr>
-            {% endif %}
-            <tr>
-                <th>Phone</th>
-                <td>{{ user.phone ? user.phone : 'Non renseigné' }}</td>
-            </tr>
-            {% if user.name and user.noSIRET %}
-                <tr>
-                    <th>Name</th>
-                    <td>{{ user.name }}</td>
-                </tr>
-                <tr>
-                    <th>NoSIRET</th>
-                    <td>{{ user.noSIRET }}</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+                <div class="col-lg-8">
+                        <!-- Account details card-->
+                        <div class="card mb-4">
+                            <div class="card-header">Account Details</div>
+                            <div class="card-body">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            {% if user.username %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Username</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ user.username }}</p>
+                                </div>
+                            </div>
+                                <hr>
+                            {% endif %}
 
+                            {% if user.name and user.noSIRET %}
+
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">Numéro SIRET</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">{{ user.noSIRET }}</p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <p class="mb-0">nom d'entreprise</p>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <p class="text-muted mb-0">{{ user.name }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Email</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ user.email }}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <p class="mb-0">Phone</p>
+                                </div>
+                                <div class="col-sm-9">
+                                    <p class="text-muted mb-0">{{ user.phone ? user.phone : 'Non renseigné' }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+                </div>
+    </div>
+    </div>
+
+    </section>
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}
