@@ -34,10 +34,6 @@ class UserController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        // Users with ROLE_BLOCKED can't edit their profile
-        if ($this->isGranted('ROLE_BLOCKED')) {
-            return new Response('You are blocked!', 403);
-        }
         $user = $this->getUser();
 
         $form = null;
