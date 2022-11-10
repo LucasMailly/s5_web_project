@@ -59,9 +59,9 @@ symfony serve
 
 | email   |      password      | blocked |
 |----------|-------------|----------|
-| admin@test.com |  123456 | true |
-| user1@test.com |  123456 | true |
+| admin@test.com |  123456 | false |
+| user1@test.com |  123456 | false |
 | user2@test.com |  123456 | true |
-| pro1@test.com |  123456 |  true |
+| pro1@test.com |  123456 |  false |
 | pro2@test.com |  123456 | true |
-| pro3@test.com |  123456 | true |
+| pro3@test.com |  123456 | false |
