@@ -26,12 +26,12 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('S5 Web Project');
+            ->setTitle('ReShop');
     }
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToRoute('Back to website', 'fa fa-home', 'app_home');
+        yield MenuItem::linkToRoute('Retour au site', 'fa fa-home', 'app_home');
         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
         yield MenuItem::linkToCrud('Article', 'fas fa-list', Article::class);
         yield MenuItem::linkToCrud('Contact', 'fas fa-list', Contact::class);

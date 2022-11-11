@@ -109,7 +109,7 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET', 'POST'])]
+    #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET', 'POST'], options: ['expose' => true])]
     public function add(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
@@ -123,7 +123,7 @@ class ArticleController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET', 'POST'])]
+    #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET', 'POST'], options: ['expose' => true])]
     public function drop(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */

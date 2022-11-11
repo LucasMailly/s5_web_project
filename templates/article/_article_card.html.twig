@@ -5,20 +5,7 @@
 		<img
 		src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
 		<!-- Product details-->
-		<div
-			class="card-body p-4">
-			{% if app.user and is_granted('ROLE_INDIVIDUAL')%}
-				<!-- like button -->
-				{% if app.user in article.favoriteUsers %}
-					<a href="{{ path('app_article_drop', {'id': article.id}) }}" class="btn btn-danger btn-circle btn-circle-sm position-absolute top-0 end-0 mt-2 me-2">
-						<i class="fa-solid fa-heart"></i>
-					</a>
-				{% else %}
-					<a href="{{ path('app_article_add', {'id': article.id}) }}" class="btn btn-outline-danger btn-circle btn-circle-sm position-absolute top-0 end-0 mt-2 me-2">
-						<i class="fa-regular fa-heart"></i>
-					</a>
-				{% endif %}
-			{% endif %}
+		<div class="card-body p-4">
 			<div
 				class="text-center">
 				<!-- Product name-->
@@ -32,6 +19,19 @@
 		<!-- Product actions-->
 		<div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
 			<div class="text-center">
+				{% if app.user and is_granted('ROLE_INDIVIDUAL') and not is_granted('ROLE_ADMIN') %}
+					<!-- like button -->
+					{% if app.user in article.favoriteUsers %}
+						<btn class="btn btn-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="drop">
+							<i class="fa-solid fa-heart"></i>
+						</btn>
+					{% else %}
+						<btn class="btn btn-outline-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="add">
+							<i class="fa-regular fa-heart"></i>
+						</btn>
+					{% endif %}
+					<br>
+				{% endif %}
 				<a class="btn btn-outline-dark mt-auto" href="{{ path('app_article_show', {'id': article.id}) }}">Voir l'article</a>
 			</div>
 		</div>
