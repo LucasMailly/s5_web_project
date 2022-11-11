@@ -11,6 +11,10 @@ import './styles/app.scss';
 // start the Stimulus application
 import './bootstrap';
 
+// add fontawesome
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');
+
 // FOS JS Routing
 import Routing from 'fos-router';
 const routes = require('./js/routes.json');

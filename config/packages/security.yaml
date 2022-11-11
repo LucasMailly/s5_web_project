@@ -39,9 +39,13 @@ security:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/profile/edit, allow_if: "is_granted('ROLE_USER') and not is_granted('ROLE_BLOCKED')" }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/article/new, allow_if: "is_granted('ROLE_PRO') and not is_granted('ROLE_BLOCKED') and not is_granted('ROLE_ADMIN')" }
+        - { path: ^/article/\d+/edit, allow_if: "is_granted('ROLE_PRO') and not is_granted('ROLE_BLOCKED')" }
         - { path: ^/article/\d+, roles: PUBLIC_ACCESS }
         - { path: ^/article/favorite, roles: ROLE_USER }
+        - { path: ^/article/update/quantiy, allow_if: "is_granted('ROLE_PRO') and not is_granted('ROLE_BLOCKED')" }
         - { path: ^/article, roles: ROLE_PRO }
     
 when@test:

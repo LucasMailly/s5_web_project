@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ArticleRepository;
 use App\Repository\CategoryRepository;
+use App\Repository\HomepageRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,7 @@ use Knp\Component\Pager\PaginatorInterface;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository,CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator): Response
+    public function index(ArticleRepository $articleRepository,CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator, HomepageRepository $homepageRepository): Response
     {
         //Get all articles
         $categories = $categoryRepository->findAll();
@@ -38,12 +39,17 @@ class HomeController extends AbstractController
             ]);
         }
 
+        //Dynamic content choosed by the admin
+        $homepage = $homepageRepository->findAll()[0];
+        $sections = $homepage->getSections();
+
+
         // if not, we render the normal homepage
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'categories' => $categories,
-            'mostRecentArticles' => $articleRepository->findMostRecents(),
-            'mostFavoriteArticles' => $articleRepository->findMostFavorites(),
+            'mostRecentArticles' => in_array('mostRecentArticles', $sections) ? $articleRepository->findMostRecents() : null,
+            'mostFavoriteArticles' => in_array('mostFavoriteArticles', $sections) ? $articleRepository->findMostFavorites() : null,
         ]);
     }
 }
