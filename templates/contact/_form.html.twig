@@ -1,4 +1,15 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+  <div class="mb-3">{{form_label(form.name)}}
+    {{ form_widget(form.name, {'attr': {'class': 'task_field'}}) }}</br>
+    </div>
+    <div class="mb-3">
+    {{form_label(form.email)}}
+      {{ form_widget(form.email, {'attr': {'class': 'task_field'}}) }}</br>
+      </div>
+      <div class="mb-3">
+      {{form_label(form.message)}}
+        {{ form_widget(form.message, {'attr': {'class': 'task_field'}}) }}</br>
+        </div>
+    <button class="btn btn-outline-dark mt-auto">{{ button_label|default('Envoyer') }}</button>
 {{ form_end(form) }}
