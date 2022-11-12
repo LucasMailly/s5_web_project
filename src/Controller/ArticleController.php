@@ -61,6 +61,12 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
+        if ($article->getQuantity() == 0){
+            $this->addFlash(
+                'danger',
+                'Rupture de Stock'
+            );
+        }
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
@@ -152,12 +158,6 @@ class ArticleController extends AbstractController
         }else if ($update == 'minus' && $article->getQuantity() > 0) {
             $article->setQuantity($article->getQuantity()-1);
             }
-        if ($article->getQuantity() == 0){
-            $this->addFlash(
-                'notice',
-                'Rupture de Stock'
-            );
-        }
         $articleRepository->add($article, true);
 
         // redirect to previous page
