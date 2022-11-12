@@ -72,7 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     #[ORM\Column(type:"string", length:255, nullable:true, unique: true)]
     private $name;
 
-    #[ORM\Column(type:"integer", nullable:true, unique: true)]
+    #[ORM\Column(type:"string", length:14, nullable:true, unique: true)]
     #[Assert\Regex(
         pattern: '/^[0-9]{14}$/',
         message: 'Le numéro SIRET n\'est pas valide. Il doit contenir 14 chiffres.',
