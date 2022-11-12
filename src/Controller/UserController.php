@@ -16,19 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/profile')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(): Response
-    {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-
-        return $this->render('user/show.html.twig', [
-            'user' => $this->getUser(),
-        ]);
-    }
-
-    #[Route('/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
+    #[Route('/', name: 'app_user_index', methods: ['GET', 'POST'])]
     public function edit(Request $request, UserRepository $userRepository): Response
     {
         if (!$this->getUser()) {
@@ -54,10 +42,20 @@ class UserController extends AbstractController
             $userRepository->add($user, true);
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        }else{
+            // if there is errors, we display them via flash messages
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('danger', $error->getMessage());
+            }
+
+            return $this->renderForm('user/index.html.twig', [
+                'user' => $user,
+                'form' => $form,
+            ]);
         }
 
 
-        return $this->renderForm('user/edit.html.twig', [
+        return $this->renderForm('user/index.html.twig', [
             'user' => $user,
             'form' => $form,
         ]);

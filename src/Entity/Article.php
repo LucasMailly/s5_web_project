@@ -18,26 +18,28 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide')]
     private $title;
 
     #[ORM\Column(type: 'float')]
+    #[Assert\NotBlank(message: 'Veuillez saisir un prix')]
+    #[Assert\Positive(message: 'Le prix doit être positif')]
     private $price;
 
     #[ORM\Column(type: 'date')]
     private $dateParution;
 
     #[ORM\Column(type: 'boolean')]
-    private $negotiation;
+    private $negotiation = false;
 
     #[ORM\Column(type: 'boolean')]
-    private $used;
+    private $used = false;
 
-    #[Assert\NotBlank]
-    #[Assert\PositiveOrZero]
+    #[Assert\NotBlank(message: 'Veuillez saisir la quantité de votre stock pour cet article')]
+    #[Assert\PositiveOrZero(message: 'La quantité doit être positive ou nulle')]
     #[ORM\Column(type: 'integer')]
     private $quantity;
 

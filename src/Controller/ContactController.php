@@ -24,7 +24,9 @@ class ContactController extends AbstractController
 
          if ($form->isSubmitted() && $form->isValid()) {
             $contact->setUser($user);
-             $contactRepository->add($contact, true);
+            $contactRepository->add($contact, true);
+
+            $this->addFlash('success', 'Votre message a bien été envoyé !');
 
              return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
          }

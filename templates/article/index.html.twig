@@ -1,53 +1,22 @@
 {% extends 'base.html.twig' %}
 
-{% block head %}
-	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-	<meta name="description" content=""/>
-	<meta name="author" content=""/>
-{% block title %}Mes articles{% endblock %}
+{% block title %}Mes articles
 {% endblock %}
 
 {% block body %}
-    <h1 class="mt-3 mx-5">Mes Articles</h1>
-
-    {% if not is_granted('ROLE_BLOCKED') %}
-				<a class="btn btn-outline-dark bg-light mt-3 mx-5" href="{{ path('app_article_new') }}">Ajouter un article</a>
-    {% endif %}
-
-    <div class="py-5">
-      <div class="container mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
-        {% for article in articles %}
-        <div class="col mb-5">
-          <div
-            class="card h-100">
-            <!-- Product image-->
-                <img src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}">
-                <!-- Product details-->
-                <div class="card-body p-4">
-                  <div
-                    class="text-center">
-                    <!-- Product name-->
-                    <h5 class="fw-bolder">{{ article.title }}</h5>
-                    <!-- Product price-->
-                    <h5>{{ article.price }}
-                      €</h5>
-                <h5>Stock: {{article.quantity}}</h5>
-                </div>
-                </div>
-                <!-- Product actions-->
-                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                <div class="text-center">
-                  <a class="btn btn-outline-dark mt-auto" href="{{ path('app_article_show', {'id': article.id}) }}">Voir l'article</a>
-                </div>
-                </div>
-                </div>
-                </div>
-    {% else %}
-        <p>Aucun article trouvé</p>
-    {% endfor %}
-    </div>
-    </div>
-    </div>
+	<h1 class="mt-3 mx-5">Mes Articles</h1>
+	{% if not is_granted('ROLE_BLOCKED') %}
+		<a class="btn btn-outline-dark bg-light mt-3 mx-5" href="{{ path('app_article_new') }}">Ajouter un article</a>
+	{% endif %}
+	<div class="py-5">
+		<div class="container mt-5">
+			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-5 justify-content-center">
+				{% for article in articles %}
+					{% include "article/_article_card.html.twig" %}
+				{% else %}
+					<p>Vous n'avez pas encore d'article</p>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
