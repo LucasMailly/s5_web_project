@@ -12,20 +12,45 @@
                     <div class="card h-100 bg-light">
                         <div class="card-body p-4">
                             <div class="text-center">
-                                {{ form_start(registrationForm) }}</br>
-                                    {{ form_label(registrationForm.email) }}</br>
-                                    {{ form_widget(registrationForm.email) }}</br>
-                                    {{ form_label(registrationForm.plainPassword) }}</br>
-                                    {{ form_widget(registrationForm.plainPassword, {
-                                        label: 'Mot de passe'
-                                    }) }}</br>
-                                    {{ form_label(registrationForm.username) }}</br>
-                                    {{ form_widget(registrationForm.username) }}</br>
-                                    {{ form_label(registrationForm.phone) }}</br>
-                                    {{ form_widget(registrationForm.phone) }}</br>
-                                    <br>
-                                    <button type="submit" class="btn btn-outline-dark mt-auto">S'inscrire</button></br>
-                                {{ form_end(registrationForm) }}</br>
+                                {{ form_start(registrationForm) }}
+                                <div class="form-group row">
+                                <div class="col-sm-6 col-form-label">
+                                    {{ form_label(registrationForm.email) }}
+                                    </div>
+                                  <div class="col-sm-5">
+                                    {{ form_widget(registrationForm.email, {'attr': {'class': 'task_field'}}) }}
+                                    </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                    <div class="col-sm-6 col-form-label">
+                                    {{ form_label(registrationForm.plainPassword) }}
+                                    </div>
+                                  <div class="col-sm-5">
+                                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'task_field'}}) }}
+                                </div>
+                                </div>
+
+                                <div class="form-group row">
+                                <div class="col-sm-6 col-form-label">
+                                {{form_label(registrationForm.username)}}
+                                  </div>
+                                <div class="col-sm-5">
+                              {{ form_widget(registrationForm.username, {'attr': {'class': 'task_field'}}) }}
+                              </div>
+                              </div>
+
+                              <div class="form-group row">
+                              <div class="col-sm-6 col-form-label">
+                              {{form_label(registrationForm.phone)}}
+                                </div>
+                              <div class="col-sm-5">
+                            {{ form_widget(registrationForm.phone, {'attr': {'class': 'task_field'}}) }}
+                            </div>
+                            </div>
+
+                                    <button type="submit" class="btn btn-outline-dark mt-3">S'inscrire</button>
+                                {{ form_end(registrationForm) }}
                             </div>
                         </div>
                     </div>
