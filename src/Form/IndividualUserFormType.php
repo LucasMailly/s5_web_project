@@ -25,8 +25,13 @@ class IndividualUserFormType extends AbstractType
                 'label' => 'numéro de téléphone',
 
             ])
-            ->add('imageFile',VichImageType::class,['required' => false, 'download_label' => false, 'download_uri' => false, 'image_uri' => false, 'delete_label'=> 'Supprimer l\'image ? ','label'=> false])
-
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'download_label' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'delete_label'=> 'Supprimer l\'image ? ','label'=> false,
+            ])
         ;
     }
 
