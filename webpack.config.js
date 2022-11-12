@@ -22,6 +22,7 @@ Encore
      * and one CSS file (e.g. app.scss) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('user_edit', './assets/js/user/index.js')
 
     .addPlugin(new FosRouting())
 
