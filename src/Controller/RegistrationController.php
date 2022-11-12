@@ -56,7 +56,7 @@ class RegistrationController extends AbstractController
         try {
             $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
         } catch (VerifyEmailExceptionInterface $e) {
-            $this->addFlash('verify_email_error', $e->getReason());
+            $this->addFlash('danger', $e->getReason());
 
             return $this->redirectToRoute('app_register');
         }
@@ -119,7 +119,7 @@ class RegistrationController extends AbstractController
                 try {
                     $this->mailer->send($email);
                 } catch (TransportExceptionInterface $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                    $this->addFlash('danger', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
                     return $this->redirectToRoute('app_register');
                 }
 
@@ -153,7 +153,7 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // Check that username is given and not already taken
             if ($form->get('username')->getData() == null) {
-                $this->addFlash('error', 'Username is required');
+                $this->addFlash('danger', 'Username is required');
                 return $this->render('registration/register-individual.html.twig', [
                     'registrationForm' => $form->createView(),
                 ]);
@@ -192,7 +192,7 @@ class RegistrationController extends AbstractController
                 try {
                     $this->mailer->send($email);
                 } catch (TransportExceptionInterface $e) {
-                    $this->addFlash('error', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
+                    $this->addFlash('danger', 'Une erreur est survenue lors de l\'envoi du mail de confirmation');
                     return $this->redirectToRoute('app_register');
                 }
 

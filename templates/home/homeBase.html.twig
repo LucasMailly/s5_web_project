@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Page d'accueil
+{% endblock %}
+
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('favorite') }}
+{% endblock %}
+
+{% block body %}
+	<div class="bg-dark py-4">
+		<div class="container px-2 px-lg-1 my-1">
+			<div class="text-white">
+				<form action="{{ path('app_home') }}" method="get">
+					<div class="px-md-5">
+						<input class="form-control mt-3 mb-4" type="text" name="search" placeholder="Rechercher" value="{{ search ?? '' }}">
+
+						<div class="form-group row my-2 align-items-center">
+							<label class="col-auto" for="category-select-form">Catégorie:</label>
+							<div class="col-auto">
+								<select id="category-select-form" name="category" class="form-control">
+									<option value="Tout">Tout</option>
+									{% for category in categories %}
+										<option value="{{ category.id }}" {{ category.id == app.request.query.get('category') ? 'selected' : '' }}>{{ category.name }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="col-auto row pt-2 pt-sm-0 align-items-center">
+								<label class="col-auto" for="date-form">Date de parution:</label>
+								<div class="col-auto">
+									<input id="date-form" class="form-control" type="date" name="dateParution" min="2018-01-01" max="2100-12-31" value="{{ app.request.query.get('dateParution') ?? '' }}">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group row my-2 align-items-center">
+							<label class="col-auto" for="price-select-form">Prix:</label>
+							<div class="col-auto">
+								<select id="price-select-form" name="order-price" class="form-control">
+									<option value="ASC" {{ app.request.query.get('order-price') == 'ASC' ? 'selected' : '' }}>Croissant</option>
+									<option value="DESC" {{ app.request.query.get('order-price') == 'DESC' ? 'selected' : '' }}>Décroissant</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row my-2 align-items-center">
+							<label class="col-12 col-md-auto" for="min-price-form">Prix min:</label>
+							<div class="col-auto">
+								<input id="min-price-form" class="form-control col-auto" name="priceMin" type="number" min="0" placeholder="min" value="{{ app.request.query.get('priceMin') ?? '' }}">
+							</div>
+							<label class="col-12 col-md-auto" for="max-price-form">Prix max:</label>
+							<div class="col-auto">
+								<input id="max-price-form" class="form-control col-auto" name="priceMax" type="number" min="0" placeholder="max" value="{{ app.request.query.get('priceMax') ?? '' }}">
+							</div>
+						</div>
+
+						<div class="row">
+							<legend class="col-form-label col-auto pt-0" for="max-price-form">Occasion:</legend>
+							<div class="col-auto">
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" id="yes" name="used" value="1" {{ app.request.query.get('used') == '1' ? 'checked' : '' }}>
+									<label class="form-check-label" for="yes">Oui</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" id="no" name="used" value="0" {{ app.request.query.get('used') == '0' ? 'checked' : '' }}>
+									<label class="form-check-label" for="no">Non</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="mt-3">
+							<button class="btn btn-primary" type="submit">Rechercher</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	{% block sections %}{% endblock %}
+{% endblock %}

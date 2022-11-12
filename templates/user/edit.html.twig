@@ -4,9 +4,10 @@
         {{ encore_entry_script_tags('user_edit') }}
     {% endblock %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Modifier User{% endblock %}
 
 {% block body %}
+    <h1 class="mt-3 mx-5">Modifier User</h1>
     {{ form_start(form) }}
     <div class="container-lg px-2 mt-4">
     <a class="btn btn-primary btn-lg px-4" href="{{ path('app_user_index') }}" >Retourner sur mon profil</a>
@@ -76,13 +77,9 @@
         </div>
     </div>
 
-    <script>
+    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
 
-        console.log(document.getElementById("inputNoSIRET"));
 
-        document.getElementById("inputNoSIRET").disabled = true;
-
-    </script>
     {{ form_end(form) }}
     <div class="container-lg px-2 mt-4">
     {{ include('user/_delete_form.html.twig') }}
