@@ -2,6 +2,11 @@
 
 {% block title %}Article{% endblock %}
 
+{% block javascripts %}
+	{{ parent() }}
+	{{ encore_entry_script_tags('favorite') }}
+{% endblock %}
+
 {% block body %}
     <h1 class="mt-3 mx-5">Article</h1>
 
@@ -74,12 +79,19 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <btn class="btn btn-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="article.id" data-action="drop">
-                            <i class="fa-solid fa-heart">
-                                ::before
-                            </i>
-                        </btn>
-
+                        {% if app.user and is_granted('ROLE_INDIVIDUAL') and not is_granted('ROLE_ADMIN') %}
+						<!-- like button -->
+						{% if app.user in article.favoriteUsers %}
+							<btn class="btn btn-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="drop">
+								<i class="fa-solid fa-heart"></i>
+							</btn>
+						{% else %}
+							<btn class="btn btn-outline-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="add">
+								<i class="fa-regular fa-heart"></i>
+							</btn>
+						{% endif %}
+						<br>
+					    {% endif %}
                     </div>
                 </div>
             </div>
