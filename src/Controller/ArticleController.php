@@ -38,9 +38,6 @@ class ArticleController extends AbstractController
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }
-        if ($this->isGranted('ROLE_BLOCKED')) {
-            return new Response('You are blocked!', 403);
-        }
         $user = $this->getUser();
 
         $article = new Article();
@@ -64,6 +61,12 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
     public function show(Article $article): Response
     {
+        if ($article->getQuantity() == 0){
+            $this->addFlash(
+                'danger',
+                'Rupture de Stock'
+            );
+        }
         return $this->render('article/show.html.twig', [
             'article' => $article,
         ]);
@@ -77,9 +80,6 @@ class ArticleController extends AbstractController
         }
         if ($article->getAuthor() != $this->getUser()) {
             return $this->redirectToRoute('app_article_dashboard');
-        }
-        if ($this->isGranted('ROLE_BLOCKED')) {
-            return new Response('You are blocked!', 403);
         }
 
         $form = $this->createForm(ArticleType::class, $article);
@@ -115,8 +115,8 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET'])]
-    public function add(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    #[Route('/favorite/add/{id}', name: 'app_article_add', methods: ['GET', 'POST'], options: ['expose' => true])]
+    public function add(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -129,8 +129,8 @@ class ArticleController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET'])]
-    public function drop(Request $request, Article $article, EntityManagerInterface $entityManager, UserRepository $userRepository): Response
+    #[Route('/favorite/drop/{id}', name: 'app_article_drop', methods: ['GET', 'POST'], options: ['expose' => true])]
+    public function drop(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -152,21 +152,12 @@ class ArticleController extends AbstractController
         if ($article->getAuthor() != $this->getUser()) {
             return $this->redirectToRoute('app_article_dashboard');
         }
-        if ($this->isGranted('ROLE_BLOCKED')) {
-            return new Response('You are blocked!', 403);
-        }
 
         if ($update == 'plus') {
             $article->setQuantity($article->getQuantity() + 1);
         }else if ($update == 'minus' && $article->getQuantity() > 0) {
             $article->setQuantity($article->getQuantity()-1);
             }
-        if ($article->getQuantity() == 0){
-            $this->addFlash(
-                'notice',
-                'Rupture de Stock'
-            );
-        }
         $articleRepository->add($article, true);
 
         // redirect to previous page

@@ -50,15 +50,6 @@ class ProRegistrationFormType extends AbstractType
                 'required' => true,
                 'label' => 'numéro de téléphone',
             ])
-            ->add('agreeTerms', CheckboxType::class, [
-                'label' => 'J\'accepte les conditions d\'utilisation',
-                'mapped' => false,
-                'constraints' => [
-                    new IsTrue([
-                        'message' => 'You should agree to our terms.',
-                    ]),
-                ],
-            ])
         ;
     }
 

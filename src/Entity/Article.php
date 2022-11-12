@@ -18,33 +18,30 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\NotBlank(message: 'Le titre ne peut pas être vide')]
     private $title;
 
-
     #[ORM\Column(type: 'float')]
+    #[Assert\NotBlank(message: 'Veuillez saisir un prix')]
+    #[Assert\Positive(message: 'Le prix doit être positif')]
     private $price;
 
     #[ORM\Column(type: 'date')]
     private $dateParution;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $category;
+    #[ORM\Column(type: 'boolean')]
+    private $negotiation = false;
 
     #[ORM\Column(type: 'boolean')]
-    private $negotiation;
+    private $used = false;
 
-    #[ORM\Column(type: 'boolean')]
-    private $used;
-
-    #[Assert\NotBlank]
-    #[Assert\PositiveOrZero]
+    #[Assert\NotBlank(message: 'Veuillez saisir la quantité de votre stock pour cet article')]
+    #[Assert\PositiveOrZero(message: 'La quantité doit être positive ou nulle')]
     #[ORM\Column(type: 'integer')]
     private $quantity;
-
 
     #[Vich\UploadableField(mapping: 'article_images', fileNameProperty: 'imgArticle')]
     private ?File $imageFile = null;
@@ -61,6 +58,10 @@ class Article
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'favoriteArticles')]
     private $favoriteUsers;
+
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Category $category = null;
 
     public function __construct()
     {
@@ -155,17 +156,7 @@ class Article
         return $this;
     }
 
-    public function getCategory(): ?string
-    {
-        return $this->category;
-    }
 
-    public function setCategory(?string $category): self
-    {
-        $this->category = $category;
-
-        return $this;
-    }
 
     public function isNegotiation(): ?bool
     {
@@ -238,5 +229,19 @@ class Article
 
         return $this;
     }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+
 
 }
