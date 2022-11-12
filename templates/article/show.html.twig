@@ -81,6 +81,7 @@
                 <td>{{ article.author.phone }}</td>
             </tr>
         </tbody>
+    </table>
 
 
     {% if is_granted('ROLE_USER') and article.author == app.user %}
