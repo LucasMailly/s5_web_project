@@ -30,9 +30,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
     #[Assert\Email(
-        message: 'L\'email {{ value }} n\'est pas valide .',
+        message: '{{ value }} n\'est pas un email valide .',
     )]
-    #[Assert\NotNull(message: 'L\'email est obligatoire')]
+    #[Assert\NotBlank(
+        message: 'L\'email est obligatoire .',
+    )]
     private $email;
 
     #[ORM\Column(type: 'json')]
@@ -48,12 +50,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     private $password;
 
     #[ORM\Column(type:"string", length:50, nullable:true, unique: true)]
+    #[Assert\Length(
+        min: 3,
+        minMessage: 'Votre nom d\'utilisateur doit contenir au moins {{ limit }} caractères',
+        max: 50,
+        maxMessage: 'Votre nom d\'utilisateur doit contenir au plus {{ limit }} caractères',
+    )]
     private $username;
 
+    // Phone number (allow country code, spaces, dots, and dashes)
     #[ORM\Column(type:"string", length:255, nullable:true)]
+    #[Assert\NotBlank(
+        message: 'Le numéro de téléphone est obligatoire .',
+    )]
     #[Assert\Regex(
-        pattern: "/^[0-9]*$/",
-        message: 'Le nom ne doit contenir que des chiffres',
+        pattern: '/^(\+33|0)[1-9]([-. ]?[0-9]{2}){4}$/',
+        message: 'Le numéro de téléphone n\'est pas valide .',
     )]
     private $phone;
 
@@ -61,6 +73,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     private $name;
 
     #[ORM\Column(type:"integer", nullable:true, unique: true)]
+    #[Assert\Regex(
+        pattern: '/^[0-9]{14}$/',
+        message: 'Le numéro SIRET n\'est pas valide. Il doit contenir 14 chiffres.',
+    )]
     private $noSIRET;
 
     #[Vich\UploadableField(mapping: 'user_avatars', fileNameProperty: 'avatar')]
