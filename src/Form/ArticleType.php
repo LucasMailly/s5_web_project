@@ -18,6 +18,7 @@ class ArticleType extends AbstractType
         $builder
             ->add('title', null, [
                 'required' => true,
+                'label' => 'Titre',
                 'attr' => [
                     'class' => 'form-control',
                 ],
@@ -29,19 +30,25 @@ class ArticleType extends AbstractType
                     'class' => 'form-control',
                 ],
                 'required' => true,
+                'label' => 'Prix',
             ])
-            ->add('dateParution')
+            ->add('dateParution', null, [
+              'label' => 'Date de parution',
+            ])
             ->add('negotiation', null, [
+              'label' => 'Négociation',
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('used', null, [
+              'label' => 'Occasion',
                 'attr' => [
                     'class' => 'form-check-input',
                 ],
             ])
             ->add('quantity', null, [
+              'label' => 'Quantité',
                 'attr' => [
                     'min' => 0,
                     'class' => 'form-control',
@@ -56,6 +63,7 @@ class ArticleType extends AbstractType
                 'delete_label'=> 'Supprimer l\'image ? ','label'=> false,
             ])
             ->add('category', null, [
+              'label' => 'Catégorie',
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'attr' => [
