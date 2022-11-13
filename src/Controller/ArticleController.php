@@ -61,10 +61,7 @@ class ArticleController extends AbstractController
     #[Route('/{id}', name: 'app_article_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-        if ($article->getAuthor() != $this->getUser()) {
+        if ($request->isMethod('POST') && $article->getAuthor() != $this->getUser()) {
             return $this->redirectToRoute('app_article_dashboard');
         }
 
