@@ -28,7 +28,12 @@ class ContactController extends AbstractController
 
             $this->addFlash('success', 'Votre message a bien été envoyé !');
 
-             return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+         } else {
+            // if there is errors, we display them via flash messages
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('danger', $error->getMessage());
+            }
          }
 
          return $this->renderForm('contact/index.html.twig', [

@@ -58,28 +58,18 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_show', methods: ['GET'])]
-    public function show(Article $article): Response
+    #[Route('/{id}', name: 'app_article_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
+        if ($request->isMethod('POST') && $article->getAuthor() != $this->getUser()) {
+            return $this->redirectToRoute('app_article_dashboard');
+        }
+
         if ($article->getQuantity() == 0){
             $this->addFlash(
                 'danger',
                 'Rupture de Stock'
             );
-        }
-        return $this->render('article/show.html.twig', [
-            'article' => $article,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_article_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Article $article, EntityManagerInterface $entityManager): Response
-    {
-        if (!$this->getUser()) {
-            return $this->redirectToRoute('app_login');
-        }
-        if ($article->getAuthor() != $this->getUser()) {
-            return $this->redirectToRoute('app_article_dashboard');
         }
 
         $form = $this->createForm(ArticleType::class, $article);
@@ -87,17 +77,23 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-
-            return $this->redirectToRoute('app_article_dashboard', [], Response::HTTP_SEE_OTHER);
+        } else {
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash(
+                    'danger',
+                    $error->getMessage()
+                );
+            }
+            
+            $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
         }
-
-        return $this->renderForm('article/edit.html.twig', [
+        return $this->renderForm('article/show.html.twig', [
             'article' => $article,
             'form' => $form,
         ]);
     }
 
-    #[Route('/{id}', name: 'app_article_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_article_delete', methods: ['POST'])]
     public function delete(Request $request, Article $article, EntityManagerInterface $entityManager): Response
     {
         if (!$this->getUser()) {
