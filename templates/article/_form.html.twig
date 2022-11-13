@@ -1,4 +1,67 @@
 {{ form_start(form) }}
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.title)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.title, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.price)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.price, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.dateParution)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.dateParution, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.negotiation)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.negotiation, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.used)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.used, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.quantity)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.quantity, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
+<div class="form-group row">
+  <div class="col-sm-5 col-form-label">
+  {{form_label(form.category)}}
+</div>
+<div class="col-sm-5">
+  {{ form_widget(form.category, {'attr': {'class': 'task_field'}}) }}
+</div>
+</div>
+
     {{ form_widget(form) }}
     <button class="btn btn-outline-dark mt-3">{{ button_label|default('Enregistrer') }}</button>
 {{ form_end(form) }}
