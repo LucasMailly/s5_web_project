@@ -19,6 +19,7 @@ $('#btn-update-article').on('click', function () {
     $('#input-value-negotiation').attr('hidden', true);
     $('#input-value-used').attr('hidden', true);
     $('#input-value-quantity').attr('hidden', true);
+    $('#input-value-category').attr('hidden', true);
 });
 
 $('#btn-back-article').on('click', function () {
@@ -42,6 +43,7 @@ $('#btn-back-article').on('click', function () {
     $('#input-value-negotiation').attr('hidden', false);
     $('#input-value-used').attr('hidden', false);
     $('#input-value-quantity').attr('hidden', false);
+    $('#input-value-category').attr('hidden', false);
 });
 
 $('#btn-save-article').on('click', function () {
