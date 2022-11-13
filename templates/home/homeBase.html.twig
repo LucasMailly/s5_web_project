@@ -19,7 +19,7 @@
 						<div class="form-group row my-2 align-items-center">
 							<label class="col-auto" for="category-select-form">Catégorie:</label>
 							<div class="col-auto">
-								<select id="category-select-form" name="category" class="form-control">
+								<select id="category-select-form" name="category" class="form-select">
 									<option value="Tout">Tout</option>
 									{% for category in categories %}
 										<option value="{{ category.id }}" {{ category.id == app.request.query.get('category') ? 'selected' : '' }}>{{ category.name }}</option>

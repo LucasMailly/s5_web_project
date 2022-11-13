@@ -1,164 +1,188 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Article{% endblock %}
+{% block title %}Article
+{% endblock %}
 
 {% block javascripts %}
 	{{ parent() }}
 	{{ encore_entry_script_tags('favorite') }}
+    {{ encore_entry_script_tags('article_edit') }}
 {% endblock %}
 
 {% block body %}
-    <h1 class="mt-3 mx-5">Article</h1>
+	<h1 class="mt-3 mx-5">Article</h1>
 
-    {% if is_granted('ROLE_USER') and article.author == app.user and not is_granted('ROLE_BLOCKED')%}
-        <a href="{{ path('app_article_edit', {'id': article.id}) }}">Modifier</a>
+	{% if is_granted('ROLE_USER') and article.author == app.user and not is_granted('ROLE_BLOCKED')%}
+			<div class="container-lg mt-3 mx-5">
+                <btn id="btn-update-article" class="btn btn-primary btn">Modifier</btn>
+                <btn id="btn-back-article" class="btn btn-primary btn" hidden>Retour</btn>
+            </div>
     {% endif %}
 
-<section class="py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" alt="imgArticle"/></div>
-            <div class="col-md-6">
-                <h1 class="display-5 fw-bolder">{{ article.title }}</h1>
-                <div class="fs-5 mb-5">
+    {{ form_start(form, {'attr': {'id': 'form-update-article'}}) }}
+	<section class="py-5">
+		<div class="container px-4 px-lg-5 my-5">
+			<div class="row gx-4 gx-lg-5 align-items-center">
+				<div class="col-md-6">
+					<img class="card-img-top mb-5 mb-md-0" src="{{ asset(article_images_path ~ (article.imgArticle ? article.imgArticle : 'default.jpg')) }}" alt="imgArticle"/>
+					<div id="input-image" class="form-group" hidden>
+						{{ form_row(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+					</div>
+				</div>
+				<div class="col-md-6">
+                    {{ form_widget(form.title, {'attr': {'hidden': true}, 'id': 'input-title'}) }}
+					<h1 id="input-value-title" class="display-5 fw-bolder">{{ article.title }}</h1>
+					<div class="fs-5 mb-5">
 
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="prix">Prix</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.price }} €
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="dateParution">Date Parution</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.dateParution ? article.dateParution|date('Y-m-d') : '' }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="categorie">Catégorie</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.category.name }}
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="negociation">Négociation</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.negotiation ? 'Yes' : 'No' }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="occasion">Occasion</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.used ? 'Yes' : 'No' }}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-sm-6 col-form-label">
-                            <label for="Quantite">Quantité</label>
-                        </div>
-                        <div class="col-sm-5">
-                            {{ article.quantity }}
-                            {# read and display just one flash message type #}
-                            {% for message in app.flashes('notice') %}
-                                <div class="flash-notice">
-                                    {{ message }}
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="prix">Prix</label>
+							</div>
+							<div class="col-sm-5 d-flex align-items-center">
+								{{ form_widget(form.price, {'attr': {'hidden': true}, 'id': 'input-price'}) }}
+                                <div id="input-value-price">
+                                    {{ article.price }}
                                 </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        {% if app.user and is_granted('ROLE_INDIVIDUAL') and not is_granted('ROLE_ADMIN') %}
-						<!-- like button -->
-						{% if app.user in article.favoriteUsers %}
-							<btn class="btn btn-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="drop">
-								<i class="fa-solid fa-heart"></i>
-							</btn>
-						{% else %}
-							<btn class="btn btn-outline-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="add">
-								<i class="fa-regular fa-heart"></i>
-							</btn>
-						{% endif %}
-						<br>
-					    {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+                                €
+							</div>
+						</div>
 
-    {# Seller informations #}
-<section class="py-5 bg-light">
-    <div class="container px-4 px-lg-5 mt-5">
-        <h2 class="fw-bolder mb-4">Informations du vendeur</h2>
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            <div class="col mb-5">
-                <img src="{{ asset(avatars_path ~ (article.author.avatar ? article.author.avatar : 'default.png')) }}" alt="avatar" width="150" height="150">
-            </div>
-            <div class="col mb-5">
-                <div class="card h-auto">
-                    <div class="card-body p-3">
-                        <div class="text-center">
-                            <div class="col-sm-center col-form-label">
-                                <label for="nom">Nom</label>
-                            </div>
-                            <div class="col-sm-center col-form-label">
-                                <label for="email">Email</label>
-                            </div>
-                            <div class="col-sm-center col-form-label">
-                                <label for="telephone">Téléphone</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col mb-5">
-                <div class="card h-auto">
-                    <div class="card-body p-3">
-                        <div class="text-center">
-                                <div class="col-sm-center col-form-label">
-                                    {{ article.author.name }}
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="dateParution">Date Parution</label>
+							</div>
+							<div
+								class="col-sm-5">
+								<div class='input-group' id='datetimepicker'>
+									<input id="input-date" hidden class="form-control" type="date" min="2018-01-01" max="2100-12-31" value="{{ article.dateParution ? article.dateParution|date('Y-m-d') : '' }}">
+                                    {{ form_widget(form.dateParution, {'attr': {'hidden': true}}) }}
                                 </div>
-                                <div class="col-sm-center col-form-label">
-                                    {{ article.author.email }}
+                                <div id="input-value-date">
+                                    {{ article.dateParution ? article.dateParution|date('d/m/Y') : '' }}
                                 </div>
-                                <div class="col-sm-center col-form-label">
-                                    {{ article.author.phone }}
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="categorie">Catégorie</label>
+							</div>
+							<div class="col-sm-5">
+								{{ form_widget(form.category, {'attr': {'hidden': true}, 'id': 'input-category'}) }}
+                                <div id="input-value-category">
+                                    {{ article.category.name }}
                                 </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+							</div>
+						</div>
 
-        {% if is_granted('ROLE_USER') and article.author == app.user %}
-            {% if not is_granted('ROLE_BLOCKED') %}
-                {# Add/remove quantity #}
-                <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'plus'}) }}">Stock +1</a>
-                <a href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'minus'}) }}">Stock -1</a>
-            {% endif %}
-            <br>
-            <a href="{{ path('app_article_dashboard') }}">Retour au tableau de board</a>
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="negociation">Négociation</label>
+							</div>
+							<div class="col-sm-5">
+                                {{ form_widget(form.negotiation, {'attr': {'hidden': true}, 'id': 'input-negotiation'}) }}
+                                <div id="input-value-negotiation">
+                                    {{ article.negotiation ? 'Oui' : 'Non' }}
+                                </div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="occasion">Occasion</label>
+							</div>
+							<div class="col-sm-5">
+                                {{ form_widget(form.used, {'attr': {'hidden': true}, 'id': 'input-used'}) }}
+                                <div id="input-value-used">
+                                    {{ article.used ? 'Oui' : 'Non' }}
+                                </div>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-sm-6 col-form-label">
+								<label for="Quantite">Quantité</label>
+							</div>
+							<div class="col-sm-5 d-flex align-items-center">
+                                {{ form_widget(form.quantity, {'attr': {'hidden': true}, 'id': 'input-quantity'}) }}
+                                <div id="input-value-quantity">
+                                    {{ article.quantity }}
+                                </div>
+								{% if is_granted('ROLE_USER') and not is_granted('ROLE_BLOCKED') and article.author == app.user %}
+									<a id="btn-quantity-add" class="btn btn-danger mx-2" href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'minus'}) }}">Stock -1</a>
+									<a id="btn-quantity-remove" class="btn btn-success" href="{{ path('app_article_update_quantity', {'id': article.id, 'update': 'plus'}) }}">Stock +1</a>
+								{% endif %}
+							</div>
+						</div>
+						<div class="form-group row">
+							{% if app.user and is_granted('ROLE_INDIVIDUAL') and not is_granted('ROLE_ADMIN') %}
+								<!-- like button -->
+								{% if app.user in article.favoriteUsers %}
+									<btn class="btn btn-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="drop">
+										<i class="fa-solid fa-heart"></i>
+									</btn>
+								{% else %}
+									<btn class="btn btn-outline-danger btn-circle btn-circle-sm mb-3 like-btn" data-id="{{ article.id }}" data-action="add">
+										<i class="fa-regular fa-heart"></i>
+									</btn>
+								{% endif %}
+								<br>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    <div class="container-lg px-2 mt-4">
+		<button id="btn-save-article" type="button" class="btn btn-lg btn-primary px-2 mb-4" hidden>Enregistrer</button>
+	</div>
+	</section>
+	{{ form_end(form) }}
 
-            {{ include('article/_delete_form.html.twig') }}
-        {% endif %}
-
+	{# Seller informations #}
+	<section class="py-5 bg-light">
+		<div class="container px-4 px-lg-5 mt-5">
+			<h2 class="fw-bolder mb-4">Informations du vendeur</h2>
+			<div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center mb-4">
+				<div class="col mb-5">
+					<img src="{{ asset(avatars_path ~ (article.author.avatar ? article.author.avatar : 'default.png')) }}" alt="avatar" width="150" height="150">
+				</div>
+				<div class="col mb-5">
+					<div class="card h-auto">
+						<div class="card-body p-3">
+							<div class="text-center">
+								<div class="col-sm-center col-form-label">
+									<label for="nom">Nom</label>
+								</div>
+								<div class="col-sm-center col-form-label">
+									<label for="email">Email</label>
+								</div>
+								<div class="col-sm-center col-form-label">
+									<label for="telephone">Téléphone</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col mb-5">
+					<div class="card h-auto">
+						<div class="card-body p-3">
+							<div class="text-center">
+								<div class="col-sm-center col-form-label">
+									{{ article.author.name }}
+								</div>
+								<div class="col-sm-center col-form-label">
+									{{ article.author.email }}
+								</div>
+								<div class="col-sm-center col-form-label">
+									{{ article.author.phone }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% if is_granted('ROLE_USER') and not is_granted('ROLE_BLOCKED') and article.author == app.user %}
+				{{ include('article/_delete_form.html.twig') }}
+			{% endif %}
+		</div>
+	</section>
 
 {% endblock %}
-
-
-
