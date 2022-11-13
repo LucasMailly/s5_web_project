@@ -24,6 +24,7 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('user_edit', './assets/js/user/index.js')
     .addEntry('favorite', './assets/js/article/favorite.js')
+    .addEntry('article_edit', './assets/js/article/index.js')
 
     .addPlugin(new FosRouting())
 

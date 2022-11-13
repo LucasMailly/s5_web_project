@@ -84,7 +84,7 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
     if(isset($params['dateParution']) && $params['dateParution'] !== ''){
-      $qb=$qb->andWhere('a.dateParution >= :dateParution')
+      $qb=$qb->andWhere('a.dateParution = :dateParution')
         ->setParameter('dateParution', $params['dateParution']);
     }
 

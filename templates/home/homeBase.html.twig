@@ -19,7 +19,7 @@
 						<div class="form-group row my-2 align-items-center">
 							<label class="col-auto" for="category-select-form">Catégorie:</label>
 							<div class="col-auto">
-								<select id="category-select-form" name="category" class="form-control">
+								<select id="category-select-form" name="category" class="form-select">
 									<option value="Tout">Tout</option>
 									{% for category in categories %}
 										<option value="{{ category.id }}" {{ category.id == app.request.query.get('category') ? 'selected' : '' }}>{{ category.name }}</option>
@@ -37,7 +37,7 @@
 						<div class="form-group row my-2 align-items-center">
 							<label class="col-auto" for="price-select-form">Prix:</label>
 							<div class="col-auto">
-								<select id="price-select-form" name="order-price" class="form-control">
+								<select id="price-select-form" name="order-price" class="form-select">
 									<option value="ASC" {{ app.request.query.get('order-price') == 'ASC' ? 'selected' : '' }}>Croissant</option>
 									<option value="DESC" {{ app.request.query.get('order-price') == 'DESC' ? 'selected' : '' }}>Décroissant</option>
 								</select>
