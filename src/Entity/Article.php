@@ -26,7 +26,7 @@ class Article
 
     #[ORM\Column(type: 'float')]
     #[Assert\NotBlank(message: 'Veuillez saisir un prix')]
-    #[Assert\Positive(message: 'Le prix doit être positif')]
+    #[Assert\PositiveOrZero(message: 'Le prix doit être positif')]
     private $price;
 
     #[ORM\Column(type: 'date')]
