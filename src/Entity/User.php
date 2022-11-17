@@ -94,7 +94,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \Serial
     #[ORM\ManyToMany(targetEntity: Article::class, mappedBy: 'favoriteUsers')]
     private $favoriteArticles;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contact::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Contact::class, orphanRemoval: true)]
     private $contacts;
 
     #[ORM\Column(type:"boolean")]
