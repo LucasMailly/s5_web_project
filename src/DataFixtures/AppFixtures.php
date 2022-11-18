@@ -69,7 +69,8 @@ class AppFixtures extends Fixture
                 'isVerified' => true,
             ],
             [
-                'noSiret' => '458675',
+                //noSiret is 14 digits
+                'noSiret' => '12345678901234',
                 'name' => 'Nike',
                 'email' => 'pro1@test.com',
                 'password' => '123456',
@@ -80,7 +81,7 @@ class AppFixtures extends Fixture
                 'isVerified' => true,
             ],
             [
-                'noSiret' => '326895',
+                'noSiret' => '78945612301234',
                 'name' => 'IKEA',
                 'email' => 'pro2@test.com',
                 'password' => '123456',
@@ -91,7 +92,7 @@ class AppFixtures extends Fixture
                 'isVerified' => true,
             ],
             [
-                'noSiret' => '48756',
+                'noSiret' => '45678912301234',
                 'name' => 'NORDIC',
                 'email' => 'pro3@test.com',
                 'password' => '123456',
